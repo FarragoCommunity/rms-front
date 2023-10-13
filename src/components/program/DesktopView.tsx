@@ -98,7 +98,7 @@ export default function DesktopView(props: Props) {
             type="text"
             disabled
             className="h-10 w-11/12 bg-white rounded-lg text-md placeholder:pl-2 placeholder:text-primary"
-            placeholder={`${programme?.name}`}
+            placeholder={`${programme?programme?.name:''}`}
           />
         </div>
         <div className="flex w-full px-4">
@@ -108,7 +108,7 @@ export default function DesktopView(props: Props) {
               type="text"
               disabled
               className="h-10 w-11/12 bg-white rounded-lg text-md placeholder:pl-2 placeholder:text-primary"
-              placeholder={`${programme?.programCode}`}
+              placeholder={`${programme?programme?.programCode:''}`}
             />
           </div>
           <div className="flex flex-col w-2/3">
@@ -117,7 +117,7 @@ export default function DesktopView(props: Props) {
               type="text"
               disabled
               className="h-10 w-11/12 bg-white rounded-lg text-md placeholder:pl-2 placeholder:text-primary"
-              placeholder={`0${programme?.candidateCount}`}
+              placeholder={`0${programme?programme?.candidateCount:''}`}
             />
           </div>
         </div>
@@ -127,7 +127,7 @@ export default function DesktopView(props: Props) {
             type="text"
             disabled
             className="h-10 w-11/12 bg-white rounded-lg text-md placeholder:pl-2 placeholder:text-primary"
-            placeholder={`${programme?.category?.name}`}
+            placeholder={`${programme?programme?.category?.name:''}`}
           />
         </div>
         <div className="flex flex-col w-full pl-4">
@@ -136,7 +136,7 @@ export default function DesktopView(props: Props) {
             type="text"
             disabled
             className="h-10 w-11/12 bg-white rounded-lg text-md placeholder:pl-2 placeholder:text-primary"
-            placeholder={`${programme?.duration}`}
+            placeholder={`${programme?programme?.duration:''}`}
           />
         </div>
         <div className="flex flex-col w-full pl-4">
@@ -155,7 +155,7 @@ export default function DesktopView(props: Props) {
               type="text"
               disabled
               className="h-10 w-11/12 bg-white rounded-lg text-md placeholder:pl-2 placeholder:text-primary"
-              placeholder={`${programme?.mode?.replace('_', ' ')}`}
+              placeholder={`${programme?programme?.mode?.replace('_', ' '):''}`}
             />
           </div>
           <div className="flex flex-col w-1/3">
@@ -164,7 +164,7 @@ export default function DesktopView(props: Props) {
               type="text"
               disabled
               className="h-10 w-11/12 bg-white rounded-lg text-md placeholder:pl-2 placeholder:text-primary"
-              placeholder={`${programme?.model?.toUpperCase()}`}
+              placeholder={`${programme?programme?.model?.toUpperCase():''}`}
             />
           </div>
           <div className="flex flex-col w-1/3">
@@ -173,7 +173,7 @@ export default function DesktopView(props: Props) {
               type="text"
               disabled
               className="h-10 w-11/12 bg-white rounded-lg text-md placeholder:pl-2 placeholder:text-primary"
-              placeholder={`${programme?.type}`}
+              placeholder={`${programme?programme?.type:''}`}
             />
           </div>
         </div>

@@ -30,11 +30,12 @@ import { PageChevronLeft, PageChevronRight } from "@/icons/pagination";
 import Modal from "@/components/Modal";
 import { toast } from "react-toastify";
 import { DownLoadIcon, FilterIcon } from "@/icons/action";
-// import * as XLSX from 'xlsx';
-import * as ExcelJS from "exceljs";
+import { jsPDF } from "jspdf";
+import { saveAs } from "file-saver";
 
 interface Props {
   result: Programme[];
+  published: Programme[];
   categories: Category[];
   skills: Skill[];
   teams: Team[];
@@ -46,6 +47,17 @@ interface BarData {
   currentPoint: number;
   totalSports: number;
   currentSports: number;
+}
+
+interface CategoryForTotal {
+  name: string;
+  teams: {
+    name: string;
+    lastArtsResult: number;
+    grandArtsResult: number;
+    lastSportsResult: number;
+    grandSportsResult: number;
+  }[];
 }
 
 interface ToDownLoadData {
@@ -110,12 +122,57 @@ const Result = (props: Props) => {
   const [toDownloadList, setToDownloadList] = useState<any>();
   const [sertedData, setSertedData] = useState<Programme[]>([]);
   const [toDownLoadData, setToDownLoadData] = useState<ToDownLoadData[]>([]);
+  const [categoryForTotal, SetCategoryForTotal] = useState<CategoryForTotal[]>( [] );
 
   const ProgrammeRef = useRef<HTMLDivElement>(null);
 
   const [state, PublishResultExicute] = useMutation(PublishResultsDocument);
 
   const [_, GoLiveResiltExicute] = useMutation(GoLiveDocument);
+
+  const downloadTotalPoints = (
+    programme: any = currentData,
+    bulk: boolean = true
+  ) => {
+    console.log(programme);
+
+    allData.map((all) => { });
+
+    const doc = new jsPDF("portrait", "px", "a4");
+    // Load Montserrat font
+    doc.addFont(
+      "https://fonts.gstatic.com/s/montserrat/v15/JTUSjIg1_i6t8kCHKm459Wlhzg.ttf",
+      "Montserrat",
+      "normal"
+    );
+
+    const pdfWidth = doc.internal.pageSize.getWidth();
+    const pdfHeight = doc.internal.pageSize.getHeight();
+
+    console.log("pdf", pdfWidth, pdfHeight);
+    var program = bulk ? programme : [programme];
+    doc.addPage("a4");
+
+    const backgroundImageUrl = "/a4result.jpg";
+    // Add the background image
+    doc.addImage(backgroundImageUrl, "JPEG", 0, 0, pdfWidth, pdfHeight);
+
+    // Set the font to Montserrat
+    doc.setFont("Montserrat");
+
+    // Add text and other content on top of the background image
+    doc.setFontSize(10);
+    doc.setTextColor(0, 0, 0); // Set text color to black
+
+    doc.deletePage(1);
+
+    const pdfBlob = doc.output("blob");
+    var filename = bulk
+      ? `Judge List`
+      : `${(programme as any).programCode} ${(programme as any).name}`;
+    saveAs(pdfBlob, `${filename}.pdf`);
+    // setDowloading(true)
+  };
 
   const PublishResults = async () => {
     const datas: OperationResult<
@@ -125,10 +182,7 @@ const Result = (props: Props) => {
       programCodes: SelectedProgrammes,
     });
 
-    console.log(datas);
-
     if (datas.data?.publishResults) {
-      console.log(datas.data?.publishResults);
       setIsOrderedToPublish(false);
       toast.success("Results Published");
     } else {
@@ -143,10 +197,7 @@ const Result = (props: Props) => {
         timeInSec: timeInSec,
       });
 
-    console.log(datas);
-
     if (datas.data) {
-      console.log(datas.data);
       setIsOrderedToPublish(false);
       toast.success("Results Are Live");
     } else {
@@ -177,11 +228,76 @@ const Result = (props: Props) => {
       );
     }
 
-    // Bar data
+    const teams = props.teams.map((team) => {
+      return {
+        name: team.name,
+        lastResult: 0,
+        grandResult: 0,
+      };
+    });
+
+
+    const groupedByCategory: { [key: string]: Programme[] } = {};
+    props.published.forEach((program) => {
+      const category = program?.category?.name;
+      if (!groupedByCategory[category as string]) {
+        groupedByCategory[category as string] = [];
+      }
+      groupedByCategory[category as string].push(program as Programme);
+    });
+
+    // Step 2: Transform the grouped data into CategoryForTotal format
+    const categoryForTl: CategoryForTotal[] = props.categories.map((category) => {
+      const categoryName = category.name;
+      const programsInCategory = groupedByCategory[categoryName as string] || [];
+      // Step 3: Calculate total points for each team in the category
+      const teams: { name: string; lastArtsResult: number; grandArtsResult: number ;  lastSportsResult: number; grandSportsResult: number }[] = props.teams.map(
+        (team) => {
+          return {
+            name: team.name as string,
+            lastArtsResult: 0 as number,
+            grandArtsResult: 0 as number,
+            lastSportsResult: 0 as number,
+            grandSportsResult: 0 as number,
+          }
+        }
+      );
+
+
+      programsInCategory.forEach((program) => {
+        program.candidateProgramme?.forEach((cp) => {
+          const teamName = cp.candidate?.team?.name;
+          const teamIndex = teams.findIndex((t) => t.name === teamName);
+
+          if (teamIndex !== -1) {
+            if(program.model === Model.Arts){
+              teams[teamIndex].grandArtsResult += (cp?.point ? cp?.point : 0) as number;
+            }else {
+              teams[teamIndex].grandSportsResult += (cp?.point ? cp?.point : 0) as number;
+            }
+          }
+        });
+      });
+
+      return {
+        name: categoryName as string,
+        teams: teams as {
+          name: string;
+          lastArtsResult: number;
+          grandArtsResult: number;
+          lastSportsResult: number;
+          grandSportsResult: number;
+        }[]
+      };
+    });
+
+    console.log(categoryForTl);
+
+    SetCategoryForTotal(categoryForTl);
+ 
+
 
     let teamData: BarData[] = props.teams.map((data, i) => {
-      console.log(data);
-
       return {
         name: data.name as string,
         totalPoint: (data.totalPoint as number) || (0 as number),
@@ -213,7 +329,6 @@ const Result = (props: Props) => {
 
   useEffect(() => {
     const windowWidth = window.innerWidth;
-    console.log(windowWidth);
 
     if (IsRightSideBarOpen) {
       setItemsPerPage((calculateBreakPoint(window.innerHeight) / 4) * 3);
@@ -226,13 +341,11 @@ const Result = (props: Props) => {
   useEffect(() => {
     // when screen height changes
 
-    console.log(screenHeigh);
     setIsRightSideBarOpen(false);
 
     const shh = calculateBreakPoint(window.innerHeight);
 
     setItemsPerPage(shh);
-    console.log(shh);
   }, [screenHeigh]);
 
   const calculateBreakPoint = (sh: number) => {
@@ -262,9 +375,8 @@ const Result = (props: Props) => {
         <button
           key={page}
           onClick={() => goToPage(page)}
-          className={`${
-            currentPage === page ? "bg-secondary text-white" : "bg-[#ECE1FC]"
-          }  py-2 px-4 rounded-xl font-bold mx-1 my-5`}
+          className={`${currentPage === page ? "bg-secondary text-white" : "bg-[#ECE1FC]"
+            }  py-2 px-4 rounded-xl font-bold mx-1 my-5`}
         >
           {page}
         </button>
@@ -273,6 +385,7 @@ const Result = (props: Props) => {
     return controls;
   };
 
+  
 
   useEffect(() => {
     // change the program data to download data format
@@ -296,21 +409,32 @@ const Result = (props: Props) => {
           programme.type == Types.Single
             ? candidate.grade?.pointSingle
             : programme.type == Types.Group
-            ? candidate.grade?.pointGroup
-            : programme.type == Types.House
-            ? candidate.grade?.pointHouse
-            : 0;
+              ? candidate.grade?.pointGroup
+              : programme.type == Types.House
+                ? candidate.grade?.pointHouse
+                : 0;
         let positionPoint =
           programme.type == Types.Single
             ? candidate.position?.pointSingle
             : programme.type == Types.Group
-            ? candidate.position?.pointGroup
-            : programme.type == Types.House
-            ? candidate.position?.pointHouse
-            : 0;
-        let chestNo =  programme.type == Types.House ? candidate.candidate?.chestNO?.slice(0,-2) +'00' : candidate.candidate?.chestNO
-        let candidateClass =   programme.type == Types.Single ? candidate.candidate?.class : '-'
-        let candidateName  =  programme.type == Types.Single ? candidate.candidate?.name : programme.type == Types.Group ? candidate.candidate?.name + " & Team"  : programme.type == Types.House ? candidate.candidate?.team?.name : null
+              ? candidate.position?.pointGroup
+              : programme.type == Types.House
+                ? candidate.position?.pointHouse
+                : 0;
+        let chestNo =
+          programme.type == Types.House
+            ? candidate.candidate?.chestNO?.slice(0, -2) + "00"
+            : candidate.candidate?.chestNO;
+        let candidateClass =
+          programme.type == Types.Single ? candidate.candidate?.class : "-";
+        let candidateName =
+          programme.type == Types.Single
+            ? candidate.candidate?.name
+            : programme.type == Types.Group
+              ? candidate.candidate?.name + " & Team"
+              : programme.type == Types.House
+                ? candidate.candidate?.team?.name
+                : null;
         // if there no position or grade then not push
 
         if (candidate.position || candidate.grade) {
@@ -319,7 +443,9 @@ const Result = (props: Props) => {
             programCode: programCode as string,
             programmeName: programName as string,
             category: category as string,
-            position: candidate.position?.value as number,
+            position: candidate.position?.value
+              ? candidate.position?.value
+              : ("" as any),
             grade: candidate.grade?.name
               ? candidate.grade?.name
               : ("" as string),
@@ -327,8 +453,8 @@ const Result = (props: Props) => {
             candidateName: candidateName as string,
             class: candidateClass as string,
             candidateTeam: candidate.candidate?.team?.name as string,
-            gradePoint: gradePoint ? gradePoint : (0 as number),
-            positionPoint: positionPoint as number,
+            gradePoint: gradePoint ? gradePoint : ("" as any),
+            positionPoint: positionPoint ? positionPoint : ("" as any),
             totalPoint: candidate.point as number,
             checkCode: programme.programCode as string,
           });
@@ -337,225 +463,69 @@ const Result = (props: Props) => {
     });
     // do the above code by sorted data
 
-    console.log(downloadData);
     setToDownLoadData(downloadData as ToDownLoadData[]);
   }, []);
 
-  const generateExcelFile = async (data: any) => {
-    const workbook = new ExcelJS.Workbook();
-    const worksheet = workbook.addWorksheet("Results");
-    const makeCenter = (cellLetters: any) => {
-      cellLetters.forEach((letter: any) => {
-        for (let i = 1; i < 4; i++) {
-          worksheet.getCell(letter + i).alignment = {
-            vertical: "middle",
-            horizontal: "center",
-          };
-          worksheet.getCell(letter + i).border = {
-            top: { style: "thick" },
-            left: { style: "thick" },
-            bottom: { style: "thick" },
-            right: { style: "thick" },
-          };
-          worksheet.getCell(letter + i).font= {
-            bold: true
-          }
-        }
+
+ const addPointToCategory = (program : Programme) => {
+  if (
+    SelectedProgrammes.includes(
+      program.programCode as string
+    )
+  ){
+
+  }else{
+    let CategoryEditedPts = categoryForTotal.map((cat , i)=>{
+      
+    })
+  }
+  }
+
+  const handleDownload = async () => {
+    console.log(categoryForTotal);
+
+    try {
+      const postData = {
+        data: toDownLoadData,
+        SelectedProgrammes,
+      };
+      // Make a POST request to the Excel API route
+      const response = await fetch("/api/excel", {
+        method: "POST",
+        headers: {
+          "Content-Type": "application/json", // Specify the content type if sending JSON data
+        },
+        body: JSON.stringify(postData),
       });
-    };
 
+      if (response.ok) {
+        // Convert the response to a Blob and create a URL for downloading
+        const blob = await response.blob();
+        const url = window.URL.createObjectURL(blob);
 
-    worksheet.mergeCells("A1:M1");
-    worksheet.mergeCells("A2:M2");
-    worksheet.mergeCells("B3:D3");
-    worksheet.mergeCells("E3:F3");
-    worksheet.mergeCells("G3:J3");
-    worksheet.mergeCells("K3:M3");
-    const mainTitle = worksheet.getCell("A1");
-    mainTitle.value = "Realia'23";
-    const resultTitle = worksheet.getCell("A2");
-    resultTitle.value = "Results";
-    worksheet.getCell("B3").value = "Programs";
-    worksheet.getCell("E3").value = "Programs";
-    worksheet.getCell("G3").value = "Candidate";
-    worksheet.getCell("K3").value = "Score";
-    makeCenter(["A", "B", "E", "G", "K"]);
+        // Create a download link and trigger the download
+        const a = document.createElement("a");
+        a.href = url;
+        a.download = "data.xlsx";
+        a.click();
 
-    mainTitle.font = {
-      size: 48,
-      bold:true,
-    };
-    resultTitle.font = {
-      size: 14,
-      bold:true,
-    };
-
-    // Define the columns in the Excel sheet
-    const headers = [
-      "SL. NO",
-      "Program Code",
-      "Program",
-      "Category",
-      "Position",
-      "Grade",
-      "Chest No",
-      "Name",
-      "Class",
-      "Team",
-      "Grade Point",
-      "Position Point",
-      "Total Point",
-    ];
-    const widths: any = {
-      A: 6,
-      B: 13,
-      C: 30,
-      D: 16,
-      E: 8,
-      F: 6,
-      G: 9,
-      H: 30,
-      I: 6,
-      J: 9,
-      K: 11,
-      L: 13,
-      M: 10,
-    };
-
-    Object.keys(widths).forEach((cell: any) => {
-      const column = worksheet.getColumn(cell);
-      column.width = widths[cell];
-    });
-
-    const headerRow = worksheet.addRow(headers);
-    headerRow.eachCell((cell) => {
-      cell.border = {
-        top: { style: "thick" },
-        left: { style: "thick" },
-        bottom: { style: "thick" },
-        right: { style: "thick" },
-      };
-      cell.font = {
-        bold: true,
-      };
-    });
-
-    //////////////////////   For adding image in excel  ///////////////////////////////////////
-    // const image = workbook.addImage({
-    //   filename: 'image.png',
-    //   extension: 'png',
-    // });
-    
-    // // Define the dimensions of the image
-    // const imageWidth = 200; // Width in pixels
-    // const imageHeight = 150; // Height in pixels
-    
-    // // Get the dimensions of the worksheet
-    // const worksheetWidth = (worksheet.pageSetup as any).pageWidth;
-    // const worksheetHeight = (worksheet.pageSetup as any).pageHeight;
-    
-    // // Calculate the position to center the image
-    // const x = (worksheetWidth - imageWidth) / 2;
-    // const y = (worksheetHeight - imageHeight) / 2;
-    
-    // // Add the image to the worksheet
-    // worksheet.addImage(image, {
-    //   tl: { col: 1, row: 1 }, // Position of the top-left corner of the image
-    //   ext: { width: imageWidth, height: imageHeight }, // Dimensions of the image
-    // });
-    ////////////////////////////////////////////////////////////////////////////////////////
-
-    function setBlackBackground(
-      worksheet: any,
-      startCell: any,
-      endCell: any,
-      cellNumber: any
-    ) {
-      for (let i = startCell.charCodeAt(0); i <= endCell.charCodeAt(0); i++) {
-        const columnLetter = String.fromCharCode(i);
-        const cellAddress = `${columnLetter}${cellNumber}`;
-        const cell = worksheet.getCell(cellAddress);
-
-        // Set a black background for the cell
-        cell.fill = {
-          type: "pattern",
-          pattern: "solid",
-          fgColor: { argb: "000000" }, // Black background
-        };
-        cell.font = {
-          color: { argb: "FFFFFF" }, // White text
-        };
+        // // Clean up by revoking the URL
+        window.URL.revokeObjectURL(url);
+      } else {
+        console.error("Failed to generate Excel file.");
       }
+    } catch (error) {
+      console.error("Error:", error);
     }
-
-    var slno = 1
-    data.forEach((item: any) => {
-      // console.log(item);
-      if (SelectedProgrammes.includes(item.checkCode)) {
-        const subRow = worksheet.addRow(Object.values(item));
-        subRow.eachCell((cell, num) => {
-          cell.border = {
-            top: { style: "thin" },
-            left: { style: "thin" },
-            bottom: { style: "thin" },
-            right: { style: "thin" },
-          };
-          if (num == 1 && cell.value){
-            cell.value = slno++;
-          }
-          if (num == 2 && cell.value) {
-            console.log(cell.row);
-            setBlackBackground(worksheet, "A", "M", cell.row);
-          }
-          if (num == 14) {
-            cell.value = "";
-            cell.border = {};
-          }
-        });
-      }
-    });
-
-  
-
-    // Generate the Excel file
-    const buffer = await workbook.xlsx.writeBuffer();
-
-    // Create a Blob containing the Excel file data
-    const blob = new Blob([buffer], {
-      type: "application/vnd.openxmlformats-officedocument.spreadsheetml.sheet",
-    });
-
-    // Create a URL for the Blob
-    const blobURL = URL.createObjectURL(blob);
-
-    // Create a link to trigger the download
-    const a = document.createElement("a");
-    a.href = blobURL;
-    a.download = "Results.xlsx";
-    a.style.display = "none";
-
-    // Trigger the click event to start the download
-    document.body.appendChild(a);
-    a.click();
-
-    // Clean up resources
-    URL.revokeObjectURL(blobURL);
-    document.body.removeChild(a);
   };
-
-  const handleDownload = () => {
-    generateExcelFile(toDownLoadData);
-  };
-
   return (
     <>
       <div className="w-full h-full">
         <ResultBar data={barData} />
 
         <DetailedDiv
-          height={`${
-            (itemsPerPage / (IsRightSideBarOpen ? 3 : 4)) * 6 + 4.5
-          }rem`}
+          height={`${(itemsPerPage / (IsRightSideBarOpen ? 3 : 4)) * 6 + 4.5
+            }rem`}
         >
           <div className="flex-1 h-full">
             <div className="h-10 cursor-pointer flex justify-between mb-4">
@@ -605,14 +575,14 @@ const Result = (props: Props) => {
                     tabIndex={0}
                     className="dropdown-content z-[1] menu p-2 shadow bg-base-100 rounded-box w-40 font-bold"
                   >
-                    <button
+                    {/* <button
                       className=" block px-2 py-1 text-md rounded-md hover:bg-secondary hover:text-white"
                       onClick={() => {
                         setIsOrderedToPublish(true);
                       }}
                     >
                       Publish
-                    </button>
+                    </button> */}
                     <button
                       className=" block px-2 py-1 text-md rounded-md hover:bg-secondary hover:text-white"
                       onClick={() => {
@@ -624,70 +594,68 @@ const Result = (props: Props) => {
                   </ul>
                 </div>
                 <div className="dropdown dropdown-end mr-1">
-                    <label
-                      tabIndex={0}
-                      className="hidden md:inline-flex bg-secondary ml-1  text-white rounded-full px-5 py-2 font-bold"
+                  <label
+                    tabIndex={0}
+                    className="hidden md:inline-flex bg-secondary ml-1  text-white rounded-full px-5 py-2 font-bold"
+                  >
+                    Filter
+                    <svg
+                      className="-mr-1 h-5 w-5 text-gray-400"
+                      viewBox="0 0 20 20"
+                      fill="currentColor"
+                      aria-hidden="true"
                     >
-                      Filter
-                      <svg
-                        className="-mr-1 h-5 w-5 text-gray-400"
-                        viewBox="0 0 20 20"
-                        fill="currentColor"
-                        aria-hidden="true"
-                      >
-                        <path
-                          fillRule="evenodd"
-                          d="M5.23 7.21a.75.75 0 011.06.02L10 11.168l3.71-3.938a.75.75 0 111.08 1.04l-4.25 4.5a.75.75 0 01-1.08 0l-4.25-4.5a.75.75 0 01.02-1.06z"
-                          clipRule="evenodd"
-                        />
-                      </svg>
-                    </label>
+                      <path
+                        fillRule="evenodd"
+                        d="M5.23 7.21a.75.75 0 011.06.02L10 11.168l3.71-3.938a.75.75 0 111.08 1.04l-4.25 4.5a.75.75 0 01-1.08 0l-4.25-4.5a.75.75 0 01.02-1.06z"
+                        clipRule="evenodd"
+                      />
+                    </svg>
+                  </label>
 
-                    <label
-                      tabIndex={0}
-                      className="md:hidden inline-flex bg-secondary ml-1  text-white rounded-full px-5 py-2 font-bold"
+                  <label
+                    tabIndex={0}
+                    className="md:hidden inline-flex bg-secondary ml-1  text-white rounded-full px-5 py-2 font-bold"
+                  >
+                    <FilterIcon className="w-7 h-7 fill-white cursor-pointer" />
+                    <svg
+                      className="-mr-1 h-5 w-5 text-gray-400"
+                      viewBox="0 0 20 20"
+                      fill="currentColor"
+                      aria-hidden="true"
                     >
-                      <FilterIcon className="w-7 h-7 fill-white cursor-pointer" />
-                      <svg
-                        className="-mr-1 h-5 w-5 text-gray-400"
-                        viewBox="0 0 20 20"
-                        fill="currentColor"
-                        aria-hidden="true"
-                      >
-                        <path
-                          fillRule="evenodd"
-                          d="M5.23 7.21a.75.75 0 011.06.02L10 11.168l3.71-3.938a.75.75 0 111.08 1.04l-4.25 4.5a.75.75 0 01-1.08 0l-4.25-4.5a.75.75 0 01.02-1.06z"
-                          clipRule="evenodd"
-                        />
-                      </svg>
-                    </label>
-                    <ul
-                      tabIndex={0}
-                      className="dropdown-content z-[1] menu p-2 shadow bg-base-100 rounded-box w-40 font-bold"
-                    >
-                      {props.categories?.map(
-                        (item: Category, index: number) => {
-                          return (
-                            <button
-                              className=" block px-2 py-1 text-md rounded-md hover:bg-secondary hover:text-white"
-                              onClick={() => {
-                                setCurrentPage(1);
-                                setData(
-                                  allData.filter(
-                                    (itm: Programme) =>
-                                      itm?.category?.name?.toLocaleLowerCase() ===
-                                      item?.name?.toLocaleLowerCase()
-                                  )
-                                );
-                              }}
-                            >
-                              {item.name}
-                            </button>
-                          );
-                        }
-                      )}
-                    </ul>
-                  </div>
+                      <path
+                        fillRule="evenodd"
+                        d="M5.23 7.21a.75.75 0 011.06.02L10 11.168l3.71-3.938a.75.75 0 111.08 1.04l-4.25 4.5a.75.75 0 01-1.08 0l-4.25-4.5a.75.75 0 01.02-1.06z"
+                        clipRule="evenodd"
+                      />
+                    </svg>
+                  </label>
+                  <ul
+                    tabIndex={0}
+                    className="dropdown-content z-[1] menu p-2 shadow bg-base-100 rounded-box w-40 font-bold"
+                  >
+                    {props.categories?.map((item: Category, index: number) => {
+                      return (
+                        <button
+                          className=" block px-2 py-1 text-md rounded-md hover:bg-secondary hover:text-white"
+                          onClick={() => {
+                            setCurrentPage(1);
+                            setData(
+                              allData.filter(
+                                (itm: Programme) =>
+                                  itm?.category?.name?.toLocaleLowerCase() ===
+                                  item?.name?.toLocaleLowerCase()
+                              )
+                            );
+                          }}
+                        >
+                          {item.name}
+                        </button>
+                      );
+                    })}
+                  </ul>
+                </div>
 
                 <button
                   className="hidden md:inline-flex ml-1 bg-secondary text-white rounded-full px-5 py-2 font-bold"
@@ -705,29 +673,27 @@ const Result = (props: Props) => {
             </div>
             <div className="flex flex-col items-center lg:justify-center w-full h-full">
               <ComponentsDiv
-                height={`${
-                  (itemsPerPage / (IsRightSideBarOpen ? 3 : 4)) * 6
-                }rem`}
+                height={`${(itemsPerPage / (IsRightSideBarOpen ? 3 : 4)) * 6
+                  }rem`}
               >
                 <div
                   ref={ProgrammeRef}
-                  className={`grid gap-4 w-full transition-all grid-cols-1 ${
-                    IsRightSideBarOpen ? "lg:grid-cols-3" : "lg:grid-cols-4"
-                  }`}
+                  className={`grid gap-4 w-full transition-all grid-cols-1 ${IsRightSideBarOpen ? "lg:grid-cols-3" : "lg:grid-cols-4"
+                    }`}
                 >
                   {currentData?.map((item: Programme, index: number) => {
                     return (
                       <div
                         key={index}
-                        className={`transition-all bg-[#EEEEEE] rounded-xl mt-[1%] cursor-pointer flex p-5 gap-3 content-center items-center h-20 relative ${
-                          SelectedProgrammes.includes(
-                            item.programCode as string
-                          )
+                        className={`transition-all bg-[#EEEEEE] rounded-xl mt-[1%] cursor-pointer flex p-5 gap-3 content-center items-center h-20 relative ${SelectedProgrammes.includes(
+                          item.programCode as string
+                        )
                             ? "bg-[#e1c7f9]"
                             : "inherit"
-                        }`}
+                          }`}
                         onClick={() => {
                           // setIsRightSideBarOpen(true);
+                          addPointToCategory(item)
                           setSelectedProgramme(item);
                           setIsEdit(false);
                           setIsCreate(false);
@@ -739,7 +705,7 @@ const Result = (props: Props) => {
                               item.programCode as string
                             )
                           ) {
-                            const deletedPrpgrammesData: string[] =
+                            const deletedPopgrammesData: string[] =
                               SelectedProgrammes.filter(
                                 (programCode: string) => {
                                   return programCode != item.programCode;
@@ -747,7 +713,7 @@ const Result = (props: Props) => {
                               );
 
                             setSelectedProgrammes(
-                              deletedPrpgrammesData as string[]
+                              deletedPopgrammesData as string[]
                             );
                           } else {
                             setSelectedProgrammes([
@@ -756,17 +722,9 @@ const Result = (props: Props) => {
                             ]);
                           }
 
-                          // setting point
-
-                          // for (let index = 0; index < (item.candidateProgramme?.length as number); index++) {
-                          //   const itm = (item.candidateProgramme as CandidateProgramme[])[index];
-
-                          // }
                           let point = barData;
 
                           item.candidateProgramme?.forEach((itm) => {
-                            console.log(itm);
-
                             let editedData = point.map((bar, i) => {
                               if (bar.name == itm.candidate?.team?.name) {
                                 let Arts = 0;
@@ -820,15 +778,14 @@ const Result = (props: Props) => {
                           {item.name}
                         </p>
                         <div
-                          className={`${
-                            item.anyIssue
+                          className={`${item.anyIssue
                               ? "bg-error"
                               : item.resultPublished
-                              ? "bg-success"
-                              : item.resultEntered
-                              ? "bg-info"
-                              : "bg-warning"
-                          }  absolute w-3 h-3 rounded-full right-3`}
+                                ? "bg-success"
+                                : item.resultEntered
+                                  ? "bg-info"
+                                  : "bg-warning"
+                            }  absolute w-3 h-3 rounded-full right-3`}
                         ></div>
                       </div>
                     );

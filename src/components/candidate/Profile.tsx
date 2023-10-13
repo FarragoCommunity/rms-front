@@ -9,6 +9,8 @@ import ResultListPhone from "./ResultListPhone";
 import { useRouter } from "next/navigation"
 interface Props {
   candidate: Candidate;
+  candidateSportsPoint: number;
+  candidateArtsPoint: number;
 }
 
 export default function ProgramAndResultDesktop(props: Props) {
@@ -109,8 +111,8 @@ export default function ProgramAndResultDesktop(props: Props) {
             <div className="mx-5 py-3 flex gap-3">
               <div
                 className={`${allOrIndividualOrGroup === "all"
-                    ? specialButtonProgram.div
-                    : commonButtonProgram.div
+                  ? specialButtonProgram.div
+                  : commonButtonProgram.div
                   }`}
               >
                 <button
@@ -118,8 +120,8 @@ export default function ProgramAndResultDesktop(props: Props) {
                     setAllOrIndividualOrGroup("all");
                   }}
                   className={`${allOrIndividualOrGroup === "all"
-                      ? specialButtonProgram.button
-                      : commonButtonProgram.button
+                    ? specialButtonProgram.button
+                    : commonButtonProgram.button
                     }`}
                 >
                   All
@@ -127,8 +129,8 @@ export default function ProgramAndResultDesktop(props: Props) {
               </div>
               <div
                 className={`${allOrIndividualOrGroup === "individual"
-                    ? specialButtonProgram.div
-                    : commonButtonProgram.div
+                  ? specialButtonProgram.div
+                  : commonButtonProgram.div
                   }`}
               >
                 <button
@@ -136,8 +138,8 @@ export default function ProgramAndResultDesktop(props: Props) {
                     setAllOrIndividualOrGroup("individual");
                   }}
                   className={`${allOrIndividualOrGroup === "individual"
-                      ? specialButtonProgram.button
-                      : commonButtonProgram.button
+                    ? specialButtonProgram.button
+                    : commonButtonProgram.button
                     }`}
                 >
                   Individual
@@ -145,8 +147,8 @@ export default function ProgramAndResultDesktop(props: Props) {
               </div>
               <div
                 className={`${allOrIndividualOrGroup === "group"
-                    ? specialButtonProgram.div
-                    : commonButtonProgram.div
+                  ? specialButtonProgram.div
+                  : commonButtonProgram.div
                   }`}
               >
                 <button
@@ -154,8 +156,8 @@ export default function ProgramAndResultDesktop(props: Props) {
                     setAllOrIndividualOrGroup("group");
                   }}
                   className={`${allOrIndividualOrGroup === "group"
-                      ? specialButtonProgram.button
-                      : commonButtonProgram.button
+                    ? specialButtonProgram.button
+                    : commonButtonProgram.button
                     }`}
                 >
                   Group
@@ -218,8 +220,8 @@ export default function ProgramAndResultDesktop(props: Props) {
             <div className="mx-5 py-3 flex gap-3">
               <div
                 className={`${allOrIndividualOrGroupResult === "all"
-                    ? specialButtonResults.div
-                    : commonButtonResults.div
+                  ? specialButtonResults.div
+                  : commonButtonResults.div
                   }`}
               >
                 <button
@@ -227,8 +229,8 @@ export default function ProgramAndResultDesktop(props: Props) {
                     setAllOrIndividualOrGroupResult("all");
                   }}
                   className={`${allOrIndividualOrGroupResult === "all"
-                      ? specialButtonResults.button
-                      : commonButtonResults.button
+                    ? specialButtonResults.button
+                    : commonButtonResults.button
                     }`}
                 >
                   All
@@ -236,8 +238,8 @@ export default function ProgramAndResultDesktop(props: Props) {
               </div>
               <div
                 className={`${allOrIndividualOrGroupResult === "individual"
-                    ? specialButtonResults.div
-                    : commonButtonResults.div
+                  ? specialButtonResults.div
+                  : commonButtonResults.div
                   }`}
               >
                 <button
@@ -245,8 +247,8 @@ export default function ProgramAndResultDesktop(props: Props) {
                     setAllOrIndividualOrGroupResult("individual");
                   }}
                   className={`${allOrIndividualOrGroupResult === "individual"
-                      ? specialButtonResults.button
-                      : commonButtonResults.button
+                    ? specialButtonResults.button
+                    : commonButtonResults.button
                     }`}
                 >
                   Individual
@@ -254,8 +256,8 @@ export default function ProgramAndResultDesktop(props: Props) {
               </div>
               <div
                 className={`${allOrIndividualOrGroupResult === "group"
-                    ? specialButtonResults.div
-                    : commonButtonResults.div
+                  ? specialButtonResults.div
+                  : commonButtonResults.div
                   }`}
               >
                 <button
@@ -263,8 +265,8 @@ export default function ProgramAndResultDesktop(props: Props) {
                     setAllOrIndividualOrGroupResult("group");
                   }}
                   className={`${allOrIndividualOrGroupResult === "group"
-                      ? specialButtonResults.button
-                      : commonButtonResults.button
+                    ? specialButtonResults.button
+                    : commonButtonResults.button
                     }`}
                 >
                   Group
@@ -365,8 +367,8 @@ export default function ProgramAndResultDesktop(props: Props) {
           <div className="h-16 w-full flex items-center gap-5 justify-center">
             <div
               className={`${programsOrResults === "programs"
-                  ? programsButton.div
-                  : resultsButton.div
+                ? programsButton.div
+                : resultsButton.div
                 }`}
             >
               <button
@@ -374,8 +376,8 @@ export default function ProgramAndResultDesktop(props: Props) {
                   setProgramsOrResults("programs");
                 }}
                 className={`${programsOrResults === "programs"
-                    ? programsButton.button
-                    : resultsButton.button
+                  ? programsButton.button
+                  : resultsButton.button
                   }`}
               >
                 Programs
@@ -383,8 +385,8 @@ export default function ProgramAndResultDesktop(props: Props) {
             </div>
             <div
               className={`${programsOrResults === "results"
-                  ? programsButton.div
-                  : resultsButton.div
+                ? programsButton.div
+                : resultsButton.div
                 }`}
             >
               <button
@@ -392,8 +394,8 @@ export default function ProgramAndResultDesktop(props: Props) {
                   setProgramsOrResults("results");
                 }}
                 className={`${programsOrResults === "results"
-                    ? programsButton.button
-                    : resultsButton.button
+                  ? programsButton.button
+                  : resultsButton.button
                   }`}
               >
                 Results
@@ -421,8 +423,8 @@ export default function ProgramAndResultDesktop(props: Props) {
               className="rounded-full h-36 w-36 border-4 bg-white flex flex-col items-end relative bg-cover"
               style={{
                 backgroundImage: `url(${props?.candidate?.imageId
-                    ? `https://drive.google.com/uc?id=${props?.candidate?.imageId}`
-                    : "https://banner2.cleanpng.com/20180410/bbw/kisspng-avatar-user-medicine-surgery-patient-avatar-5acc9f7a7cb983.0104600115233596105109.jpg"
+                  ? `https://drive.google.com/uc?id=${props?.candidate?.imageId}`
+                  : "https://banner2.cleanpng.com/20180410/bbw/kisspng-avatar-user-medicine-surgery-patient-avatar-5acc9f7a7cb983.0104600115233596105109.jpg"
                   })`,
               }}
             >
@@ -464,14 +466,14 @@ export default function ProgramAndResultDesktop(props: Props) {
                   {/* arts */}
                   <div className="bg-accent rounded-xl h-16 w-16 bigphone:h-20 bigphone:w-20 flex flex-col items-center">
                     <h1 className="text-3xl bigphone:text-4xl font-bold mt-2">
-                      {props?.candidate?.individualPoint || 0}
+                      {props?.candidateArtsPoint || 0}
                     </h1>
                     <p className="-mt-2 text-sm">Arts</p>
                   </div>
                   {/* sports */}
                   <div className="bg-accent rounded-xl h-16 w-16 bigphone:h-20 bigphone:w-20 flex flex-col items-center">
                     <h1 className="text-3xl bigphone:text-4xl font-bold mt-2">
-                      {props?.candidate?.individualSportsPoint || 0}
+                      {props?.candidateSportsPoint || 0}
                     </h1>
                     <p className="-mt-2 text-sm">Sports</p>
                   </div>
@@ -482,8 +484,8 @@ export default function ProgramAndResultDesktop(props: Props) {
             <div className="h-1/10 w-full flex items-center gap-5 justify-center pb-3">
               <div
                 className={`${programsOrResults === "programs"
-                    ? programsButton.div
-                    : resultsButton.div
+                  ? programsButton.div
+                  : resultsButton.div
                   }`}
               >
                 <button
@@ -491,8 +493,8 @@ export default function ProgramAndResultDesktop(props: Props) {
                     setProgramsOrResults("programs");
                   }}
                   className={`${programsOrResults === "programs"
-                      ? programsButton.button
-                      : resultsButton.button
+                    ? programsButton.button
+                    : resultsButton.button
                     }`}
                 >
                   Programs
@@ -500,8 +502,8 @@ export default function ProgramAndResultDesktop(props: Props) {
               </div>
               <div
                 className={`${programsOrResults === "results"
-                    ? programsButton.div
-                    : resultsButton.div
+                  ? programsButton.div
+                  : resultsButton.div
                   }`}
               >
                 <button
@@ -509,8 +511,8 @@ export default function ProgramAndResultDesktop(props: Props) {
                     setProgramsOrResults("results");
                   }}
                   className={`${programsOrResults === "results"
-                      ? programsButton.button
-                      : resultsButton.button
+                    ? programsButton.button
+                    : resultsButton.button
                     }`}
                 >
                   Results

@@ -73,18 +73,18 @@ export default function MobileView(props: Props) {
       <div className="p-5 flex flex-col items-center">
         <div className="flex flex-col w-screen px-5 bigphone:items-center">
           <p className="text-white text-3xl bigphone:text-4xl font-semibold">
-            {programme?.name}
+            {programme?.name?programme?.name:''}
           </p>
         </div>
         <div className="flex gap-2 mt-3">
           <p className="text-[#3F127A] text-xs bg-white rounded-xl px-2 py-[0.125rem] font-semibold">
-            {programme?.mode?.replace('_', ' ')}
+            {programme?.mode?programme?.mode?.replace('_', ' '):''}
           </p>
           <p className="text-[#3F127A] text-xs bg-white rounded-xl px-2 py-[0.125rem] font-semibold">
-            {programme?.model?.toUpperCase()}
+            {programme?.model?programme?.model?.toUpperCase():''}
           </p>
           <p className="text-[#3F127A] text-xs bg-white rounded-xl px-2 py-[0.125rem] font-semibold">
-            {programme?.type}
+            {programme?.type?programme?.type:''}
           </p>
         </div>
       </div>
@@ -93,19 +93,19 @@ export default function MobileView(props: Props) {
           <div className="flex flex-col aspect-auto w-40 h-32 bigphone:h-36 bigphone:w-48 bg-[#E1DEFF] rounded-3xl py-2 px-4 justify-center">
             <p className="text-gray-600 text-lt bigphone:text-sm">Category</p>
             <p className="text-[#3D127A] text-xl bigphone:2xl font-bold">
-              {programme?.category?.name}
+              {programme?programme?.category?.name:''}
             </p>
             <div className="flex justify-between">
               <div className="flex flex-col">
                 <p className="text-lt bigphone:text-xs text-gray-500">Code</p>
                 <p className="text-lt bigphone:text-sm text-[#3D127A] font-bold">
-                  {programme?.programCode}
+                  {programme?programme?.programCode:''}
                 </p>
               </div>
               <div className="flex flex-col">
                 <p className="text-lt bigphone:text-xs text-gray-500">Count</p>
                 <p className="text-lt bigphone:text-sm text-[#3D127A] font-bold ml-auto">
-                  0{programme?.candidateCount}
+                  0{programme?programme?.candidateCount:''}
                 </p>
               </div>
             </div>
@@ -114,7 +114,7 @@ export default function MobileView(props: Props) {
             <p className="text-gray-600 text-lt bigphone:text-sm">Duration</p>
             <div className="flex">
               <p className="text-[#3D127A] text-xl bigphone:2xl font-bold">
-                {programme?.duration}
+                {programme?programme?.duration:''}
               </p>
               <p className="text-[#3D127A] mt-auto text-lt bigphone:text-sm">
                 mts

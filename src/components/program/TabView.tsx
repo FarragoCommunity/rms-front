@@ -81,7 +81,7 @@ export default function TabView(props: Props) {
             type="text"
             disabled
             className="h-10 w-11/12 bg-white rounded-lg text-md placeholder:pl-2 placeholder:text-primary"
-            placeholder={`${programme?.name}`}
+            placeholder={`${programme?.name ? programme?.name:''}`}
           />
         </div>
         <div className="flex w-full px-4">
@@ -91,7 +91,7 @@ export default function TabView(props: Props) {
               type="text"
               disabled
               className="h-10 w-11/12 bg-white rounded-lg text-md placeholder:pl-2 placeholder:text-primary"
-              placeholder={`${programme?.programCode}`}
+              placeholder={`${programme?.programCode ? programme?.programCode:''}`}
             />
           </div>
           <div className="flex flex-col w-2/3">
@@ -100,7 +100,7 @@ export default function TabView(props: Props) {
               type="text"
               disabled
               className="h-10 w-11/12 bg-white rounded-lg text-md placeholder:pl-2 placeholder:text-primary"
-              placeholder={`0${programme?.candidateCount}`}
+              placeholder={`0${programme?.candidateCount ? programme?.candidateCount: ''}`}
             />
           </div>
         </div>
@@ -110,7 +110,7 @@ export default function TabView(props: Props) {
             type="text"
             disabled
             className="h-10 w-11/12 bg-white rounded-lg text-md placeholder:pl-2 placeholder:text-primary"
-            placeholder={`${programme?.category?.name}`}
+            placeholder={`${programme?.category?.name?programme?.category?.name:''}`}
           />
         </div>
         <div className="flex flex-col w-full pl-4">
@@ -119,7 +119,7 @@ export default function TabView(props: Props) {
             type="text"
             disabled
             className="h-10 w-11/12 bg-white rounded-lg text-md placeholder:pl-2 placeholder:text-primary"
-            placeholder={`${programme?.duration}`}
+            placeholder={`${programme?.duration?programme?.duration:''}`}
           />
         </div>
         <div className="flex flex-col w-full pl-4">
@@ -138,7 +138,7 @@ export default function TabView(props: Props) {
               type="text"
               disabled
               className="h-10 w-11/12 bg-white rounded-lg text-md placeholder:pl-2 placeholder:text-primary"
-              placeholder={`${programme?.mode}`}
+              placeholder={`${programme?.mode?programme?.mode?.replace('_',' '):''}`}
             />
           </div>
           <div className="flex flex-col w-1/3">
@@ -147,7 +147,7 @@ export default function TabView(props: Props) {
               type="text"
               disabled
               className="h-10 w-11/12 bg-white rounded-lg text-md placeholder:pl-2 placeholder:text-primary"
-              placeholder={`${programme?.model?.toUpperCase()}`}
+              placeholder={`${programme?.model?programme?.model?.toUpperCase():''}`}
             />
           </div>
           <div className="flex flex-col w-1/3">
@@ -156,7 +156,7 @@ export default function TabView(props: Props) {
               type="text"
               disabled
               className="h-10 w-11/12 bg-white rounded-lg text-md placeholder:pl-2 placeholder:text-primary"
-              placeholder={`${programme?.type}`}
+              placeholder={`${programme?.type?programme?.type:''}`}
             />
           </div>
         </div>
