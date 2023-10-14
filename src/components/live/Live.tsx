@@ -7,7 +7,7 @@ interface LiveProps {
 
 const Live = (props : LiveProps) => {
   return (
-    <div>{props.program ? props.program.name : "NULL DATA"}</div>
+    <div>{props.program ? props.program.name : "NIL"}</div>
   )
 }
 

@@ -108,7 +108,7 @@ export default function FirstRowFirstCard(props: Props) {
                   setFilteredSelectedProgram(program)
                 }} className="flex items-center h-14 min-h-[3.5rem] w-full text-xs bg-[#F6DEFF] rounded-xl px-3 cursor-pointer">
                   <p className="font-bold w-[25%]">{program.programCode}</p>
-                  <p className="w-[60%]">{program.name}</p>
+                  <p className="w-[60%]">{program.name?.toUpperCase()}</p>
                   <p className="w-[20%]">{program.category?.name}</p>
                 </div>
               )
@@ -121,7 +121,11 @@ export default function FirstRowFirstCard(props: Props) {
       <div className="h-[43rem] w-[50%] 2xl:w-[50%] rounded-3xl bg-[#F7F7F7]">
         {/* heading */}
         <div className="h-12">
-          <h1 className="text-3xl font-semibold px-5 my-4">Results</h1>
+          <h1 className="text-3xl font-semibold px-5 ">Results</h1>
+          <div className="flex">
+          {/* <h1 className="text-sm font-semibold px-5 ">{selectedProgram?.name}</h1>
+          <h1 className="text-sm font-semibold px-5">{selectedProgram?.category?.name}</h1> */}
+          </div>
           <hr className="border" />
         </div>
         {/* sort buttons */}

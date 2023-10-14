@@ -108,7 +108,7 @@ export default function ProgramListPhone(props: Props) {
           ? allPrograms?.map((programme) => (
               <div className="h-10 min-h-[2.5rem] w-[90%] bg-accent rounded-2xl flex justify-between items-center px-3">
               <p className="text-lt">{programme?.programme?.programCode}</p>
-              <p className="text-lt">{programme?.programme?.name}</p>
+              <p className="text-lt">{programme?.programme?.name?.toUpperCase()}</p>
               <div className="flex flex-col items-end">
                 <p className="text-tn">-</p>
                 <p className="text-tn">-</p>
@@ -119,7 +119,7 @@ export default function ProgramListPhone(props: Props) {
           ? individualPrograms?.map((programme) => (
               <div className="h-10 min-h-[2.5rem] w-[90%] bg-accent rounded-2xl flex justify-between items-center px-3">
               <p className="text-lt">{programme?.programme?.programCode}</p>
-              <p className="text-lt">{programme?.programme?.name}</p>
+              <p className="text-lt">{programme?.programme?.name?.toUpperCase()}</p>
               <div className="flex flex-col items-end">
                 <p className="text-tn">-</p>
                 <p className="text-tn">-</p>
@@ -130,7 +130,7 @@ export default function ProgramListPhone(props: Props) {
           ? groupPrograms?.map((programme) => (
               <div className="h-10 min-h-[2.5rem] w-[90%] bg-accent rounded-2xl flex justify-between items-center px-3">
               <p className="text-lt">{programme?.programme?.programCode}</p>
-              <p className="text-lt">{programme?.programme?.name}</p>
+              <p className="text-lt">{programme?.programme?.name?.toUpperCase()}</p>
               <div className="flex flex-col items-end">
                 <p className="text-tn">-</p>
                 <p className="text-tn">-</p>

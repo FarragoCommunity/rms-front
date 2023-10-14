@@ -103,7 +103,7 @@ export default function ResultListIpad(props: Props) {
                 </div>
                 {/* name */}
                 <div className="px-3">
-                  <p className="">{programme?.programme?.name}</p>
+                  <p className="">{programme?.programme?.name?.toUpperCase()}</p>
                 </div>
                 {/* result */}
                 <div className="px-3 text-lt flex items-end gap-5">
@@ -128,7 +128,7 @@ export default function ResultListIpad(props: Props) {
                 </div>
                 {/* name */}
                 <div className="px-3">
-                  <p className="">{programme?.programme?.name}</p>
+                  <p className="">{programme?.programme?.name?.toUpperCase()}</p>
                 </div>
                 {/* result */}
                 <div className="px-3 text-lt flex items-end gap-5">
@@ -153,7 +153,7 @@ export default function ResultListIpad(props: Props) {
                 </div>
                 {/* name */}
                 <div className="px-3">
-                  <p className="">{programme?.programme?.name}</p>
+                  <p className="">{programme?.programme?.name?.toUpperCase()}</p>
                 </div>
                 {/* result */}
                 <div className="px-3 text-lt flex items-end gap-5">
@@ -171,7 +171,7 @@ export default function ResultListIpad(props: Props) {
             ))
           ) : null
         ) : (
-          <p>No Results Published</p>
+          <p>No Results To View</p>
         )}
       </div>
     </>

@@ -105,7 +105,7 @@ export default function ProgramListIpad(props: Props) {
                 </div>
                 {/* name */}
                 <div className="px-3">
-                  <p className="">{programme?.programme?.name}</p>
+                  <p className="">{programme?.programme?.name?.toUpperCase()}</p>
                 </div>
                 {/* time */}
                 <div className="px-3 text-lt flex flex-col items-end">
@@ -123,7 +123,7 @@ export default function ProgramListIpad(props: Props) {
                 </div>
                 {/* name */}
                 <div className="px-3">
-                  <p className="">{programme?.programme?.name}</p>
+                  <p className="">{programme?.programme?.name?.toUpperCase()}</p>
                 </div>
                 {/* time */}
                 <div className="px-3 text-lt flex flex-col items-end">
@@ -141,7 +141,7 @@ export default function ProgramListIpad(props: Props) {
                 </div>
                 {/* name */}
                 <div className="px-3">
-                  <p className="">{programme?.programme?.name}</p>
+                  <p className="">{programme?.programme?.name?.toUpperCase()}</p>
                 </div>
                 {/* time */}
                 <div className="px-3 text-lt flex flex-col items-end">

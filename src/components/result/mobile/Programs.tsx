@@ -113,7 +113,7 @@ export default function Programs(props: Props) {
                     {program.programCode}
                     </p>
                     <p className="text-xs bigphone:text-sm">
-                    {program.name}
+                    {program.name?.toUpperCase()}
                     </p>
                   </div>
                   <p className="text-xs bigphone:text-sm">{program.category?.name}</p>
@@ -130,7 +130,11 @@ export default function Programs(props: Props) {
         <div
           className="h-1/5 w-full px-5 flex items-center leading-tight justify-between"
         >
-          <h1 className="text-2xl bigphone:text-4xl font-bold">Results</h1>
+          <div className="flex flex-col">
+          <h1 className="text-2xl bigphone:text-2xl font-bold">Results</h1>
+          <h3 className="text-md  font-bold"> {selectedProgram?.name} </h3>
+          <h3 className="text-sm  font-bold"> {selectedProgram?.category?.name} </h3>
+          </div>
 
           <button onClick={()=>{
             setSelectedProgram(null)

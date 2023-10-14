@@ -90,10 +90,10 @@ export default async (req: NextApiRequest, res: NextApiResponse) => {
       G: 9,
       H: 30,
       I: 6,
-      J: 9,
-      K: 11,
-      L: 13,
-      M: 10,
+      J: 10.2,
+      K: 6,
+      L: 8,
+      M: 5,
     };
 
     Object.keys(widths).forEach((cell: any) => {

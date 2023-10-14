@@ -157,7 +157,7 @@ export default function ResultListPhone(props: Props) {
               ))
             ) : null
           ) : (
-            <p>No Results Published</p>
+            <p>No Results To View</p>
           )}
         </div>
       </div>

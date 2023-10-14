@@ -16,16 +16,20 @@ module.exports = {
           "conic-gradient(from 180deg at 50% 50%, var(--tw-gradient-stops))",
       },
       screens: {
-        'bigphone' : '425px'
+        bigphone: "425px",
       },
       borderRadius: {
-        "big" :'2rem',
-        'large': '4rem',
-        "xlarge" : "5rem",
+        big: "2rem",
+        large: "4rem",
+        xlarge: "5rem",
       },
       fontSize: {
-        "lt" : "12px",
-        "tn" : "9px"
+        lt: "12px",
+        tn: "9px",
+      },
+      transitionTimingFunction: {
+        "slow-to-speed":
+          "cubic-bezier(0.73, 0, 0, 1)",
       },
     },
   },
