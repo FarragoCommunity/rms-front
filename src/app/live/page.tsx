@@ -223,7 +223,7 @@ export default function page({ params }: { params: { chestNo: string } }) {
                                 return <div className="relative md:h-72 md:w-72 h-64 w-64 mt-5 md:mt-0">
                                   <div className="bg-green-500 md:h-8 md:w-8 h-5 w-5 rounded-full absolute left-1/2 translate-x-8 top-[2%] flex justify-center items-center">
                                     <h1 className="text-[10px] md:text-base font-semibold text-white">
-                                      #1
+                                      #2
                                     </h1>
                                   </div>
                                   <div className="bg-green-500 h-4 md:h-6 rounded-xl absolute left-1/2 -translate-x-1/2 top-1/2 md:top-[25%] md:translate-y-[7.6rem] flex justify-center items-center">
@@ -266,7 +266,7 @@ export default function page({ params }: { params: { chestNo: string } }) {
                                 return <div className="relative md:h-72 md:w-72 h-64 w-64 mt-5 md:mt-0">
                                   <div className="bg-green-500 md:h-8 md:w-8 h-5 w-5 rounded-full absolute left-1/2 translate-x-8 top-[2%] flex justify-center items-center">
                                     <h1 className="text-[10px] md:text-base font-semibold text-white">
-                                      #1
+                                      #3
                                     </h1>
                                   </div>
                                   <div className="bg-green-500 h-4 md:h-6 rounded-xl absolute left-1/2 -translate-x-1/2 top-1/2 md:top-[25%] md:translate-y-[7.6rem] flex justify-center items-center">
