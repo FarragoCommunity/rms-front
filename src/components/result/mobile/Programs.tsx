@@ -59,6 +59,7 @@ export default function Programs(props: Props) {
               })
             }
           </select>
+          
           <form className="w-full rounded-xl overflow-hidden h-6 bigphone:h-8 border border-primary flex">
             <div className="relative flex items-center w-full">
               <div className="absolute inset-y-0 left-0 flex items-center pl-3 pointer-events-none w-full">

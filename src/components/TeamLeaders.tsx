@@ -1,12 +1,6 @@
-import Carousel from './Carousel';
+import Carousel from "./Carousel";
 
-const imageUrls = [
-  '/img/1.jpg',
-  '/img/2.jpg',
-  '/img/3.jpg',
-  '/img/4.jpg',
-
-];
+const imageUrls = ["/img/1.jpg", "/img/2.jpg", "/img/3.jpg", "/img/4.jpg"];
 
 function Home() {
   return (

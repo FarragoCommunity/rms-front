@@ -36,7 +36,6 @@ const page = async () => {
       'Expires': '0',
     },
   });
-   const h = data[0]
   return (
     <main className="w-full h-full flex ">
       <Gallery key={1} result={result.data}  />

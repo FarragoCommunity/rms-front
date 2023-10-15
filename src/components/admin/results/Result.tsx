@@ -234,7 +234,7 @@ const Result = (props: Props) => {
             }
           }
         });
-      });
+      }); 
 
       return {
         name: categoryName as string,

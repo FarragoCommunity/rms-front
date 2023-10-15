@@ -3,15 +3,16 @@ import React, { useEffect, useState } from "react";
 import GalleryHeader from "@/components/GalleryHeader";
 import SlideShow from "./SlideShow";
 import { SlideShowIcon } from "@/icons/action";
+import axios from "axios";
 
 interface Props {
   result: [];
 }
 
-function userGallery(props: Props) {  
+function userGallery(props: Props) {
+  const [resultData, setResultData] = useState<any>([]);  
   const [chunks, setChunks] = useState<any>([]);
   const [data, setData] = useState<any>([]);
-  const [sortedData, setSortedData] = useState<any>([]);
   const [imageData, setImageData] = useState<any>([]);
   const [open, setOpen] = useState<boolean>(false);
   const [slectedImage, setSelectedImage] = useState<any>("");
@@ -28,17 +29,30 @@ function userGallery(props: Props) {
         i % size ? acc : [...acc, arr.slice(i, i + size)],
       []
     );
+  
+    useEffect(() => {
+      const getGallery =  async () => {
+          await axios.get(`https://rms-mu.vercel.app/gallery?${Date.now()}`)
+              .then(res => {
+                setResultData(res.data)
+                  // // console.log(data);
+              })
+              .catch(err => {
+                  // // console.log(err)
+              })
+      }
+      getGallery()
+  }, [])
 
   useEffect(() => {
-    const sortedDatanew = props.result.sort((a: any, b: any) => {
+    const sortedDatanew = resultData.sort((a: any, b: any) => {
       return new Date(b.createdAt).getTime() - new Date(a.createdAt).getTime();
     });
-    setSortedData(sortedDatanew);
 
-    setData(data);
-    console.log(data);
+    setResultData(resultData);
+    // console.log(data);
 
-    console.log(sortedDatanew);
+    // console.log(sortedDatanew);
 
     let image = sortedDatanew.map((item: any) => item.imageId);
     let finalData: any = [];
@@ -47,20 +61,19 @@ function userGallery(props: Props) {
     }
     setImageData(finalData);
 
-    console.log(finalData);
+    // console.log(finalData);
 
     const chunksData = chunk(finalData, 12);
     setChunks(chunksData);
-    // console.log(chunks);
-  }, []);
+  }, [resultData]);
 
   const handleOpen = (image: any) => {
     setOpen(!open);
     setSelectedImage(image);
-    console.log(image);
+    // console.log(image);
     // i have to get onther 3 images
     const index = imageData.indexOf(image);
-    console.log(index);
+    // console.log(index);
     const nextOne = imageData[index + 1];
     const nextTwo = imageData[index + 2];
     const nextThree = imageData[index + 3];

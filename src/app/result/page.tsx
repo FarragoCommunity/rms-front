@@ -102,14 +102,18 @@ export default async function page({
             {/* Overall Results and toppers */}
             <OverallResults teams={teams.data?.teams.sort((a , b)=>{
               return b.totalPoint as number - (a.totalPoint as number)
-            }) as Team[]} />
+            }) as Team[]
+            }
+            categories={categories.data?.categories as Category[]}
+            programs = {result.data?.resultPublishedProgrammes as Programme[]}
+            />
 
 
             {/* Programs and Results */}
             <Programs teams={teams.data?.teams as Team[]} programs={result.data?.resultPublishedProgrammes as Programme[]} categories={categories.data?.categories as Category[]}/>
             {/* Quick Overview */}
-            {/* <Toppers categories={categories.data?.categories as Category[]} toppers={toppers.data?.getCategoryBasedToppers as Category[]} />
-            <QuickOverview count={(totalPrograms.data?.programmes?.length as number) || 0} programs={result.data?.resultEnteredProgrammes as Programme[]}/> */}
+            <Toppers categories={categories.data?.categories as Category[]} toppers={toppers.data?.getCategoryBasedToppers as Category[]} />
+            <QuickOverview count={(totalPrograms.data?.programmes?.length as number) || 0} programs={result.data?.resultPublishedProgrammes as Programme[]}/>
           </div>
         </div>
       </div>
@@ -129,9 +133,15 @@ export default async function page({
         style={{ backgroundImage: 'url("/img/hi.jpg")' }}
       >
         {/* sidebar */}
-        <DesktopSidebar  teams={teams.data?.teams.sort((a , b)=>{
+        <DesktopSidebar  
+        teams={teams.data?.teams.sort((a , b)=>{
               return b.totalPoint as number - (a.totalPoint as number)
-            }) as Team[]}/>
+            }) as Team[]
+            }
+
+            categories={categories.data?.categories as Category[]}
+            programs = {result.data?.resultPublishedProgrammes as Programme[]}
+            />
 
         {/* main content */}
         <div className="overflow-y-auto w-full mb-2" >
@@ -152,12 +162,12 @@ export default async function page({
             </div>
             {/* second row */}
 
-            {/* <div className="h-[50%] 2xl:h-[25%] w-full flex gap-10 "> */}
+            <div className="h-[50%] 2xl:h-[25%] w-full flex gap-10 ">
               {/* first card second row */}
-              {/* <SecondRowFirstCard categories={categories.data?.categories as Category[]} toppers={toppers.data?.getCategoryBasedToppers as Category[]} /> */}
+              <SecondRowFirstCard categories={categories.data?.categories as Category[]} toppers={toppers.data?.getCategoryBasedToppers as Category[]} />
               {/* second card second row */}
-              {/* <SecondRowSecondCard count={(totalPrograms.data?.programmes?.length as number) || 0} programs={result.data?.resultEnteredProgrammes as Programme[]} /> */}
-            {/* </div> */}
+              <SecondRowSecondCard count={(totalPrograms.data?.programmes?.length as number) || 0} programs={result.data?.resultPublishedProgrammes as Programme[]} />
+            </div>
             
           </div>
         </div>

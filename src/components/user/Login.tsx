@@ -19,6 +19,7 @@ import {
   LoginUserMutation,
   LoginUserMutationVariables,
 } from "@/gql/graphql";
+import NProgress from "nprogress";
 
 const LoginPage = () => {
   const router = useRouter();
@@ -27,7 +28,12 @@ const LoginPage = () => {
   const { data, setData } = useGlobalContext();
 
   const [state, LoginMutation] = useMutation(LoginUserDocument);
+  const [routerButtonClicked, setRouterButtonClicked] = useState(false);
+  NProgress.configure({ showSpinner: false });
 
+  useEffect(() => {
+    routerButtonClicked ? NProgress.start() : null;
+  }, [routerButtonClicked]);
   const {
     register,
     handleSubmit,
@@ -54,6 +60,7 @@ const LoginPage = () => {
         },
         token: datas.data?.login.token,
       });
+      setRouterButtonClicked(true);
       router.push("/admin");
     }
     reset();
@@ -62,14 +69,21 @@ const LoginPage = () => {
   return (
     <div className="flex h-[40rem] flex-col justify-center px-6 py-12 lg:px-8 fixed top-1/2 bottom-1/2 -translate-y-1/2 bg-white w-96 sm:w-[30rem] rounded-xl left-1/2 -translate-x-1/2 sm:shadow-xl">
       <div className="sm:mx-auto sm:w-full sm:max-w-sm -mt-10 ">
-        <img src="/img/realia-txt-black.png" className="mx-auto h-12" alt="fsfs" />
+        <img
+          src="/img/realia-txt-black.png"
+          className="mx-auto h-12"
+          alt="fsfs"
+        />
       </div>
       <p className="text-red-700 text-center mt-4">{error}</p>
       <div className="mt-10 sm:mx-auto sm:w-full sm:max-w-sm">
-        <form onSubmit={(e) => {
-          e.preventDefault()
-          handleSubmit(HandleLogin)()
-        }} className="space-y-6">
+        <form
+          onSubmit={(e) => {
+            e.preventDefault();
+            handleSubmit(HandleLogin)();
+          }}
+          className="space-y-6"
+        >
           <div>
             <label
               htmlFor="email"
@@ -124,7 +138,6 @@ const LoginPage = () => {
         </form>
       </div>
     </div>
-
   );
 };
 

@@ -1,7 +1,7 @@
 export default function Sidebar() {
   return (
     <>
-      <div>
+      <div> 
         {" "}
         <div className="h-full 2xl:w-80 2xl:min-w-[20rem] w-80 min-w-[21rem] bg-primary flex flex-col justify-center gap-3 pl-8">
           {/* title */}

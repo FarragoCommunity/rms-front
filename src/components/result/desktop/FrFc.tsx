@@ -121,11 +121,13 @@ export default function FirstRowFirstCard(props: Props) {
       <div className="h-[43rem] w-[50%] 2xl:w-[50%] rounded-3xl bg-[#F7F7F7]">
         {/* heading */}
         <div className="h-12">
-          <h1 className="text-3xl font-semibold px-5 ">Results</h1>
-          <div className="flex">
-          {/* <h1 className="text-sm font-semibold px-5 ">{selectedProgram?.name}</h1>
-          <h1 className="text-sm font-semibold px-5">{selectedProgram?.category?.name}</h1> */}
-          </div>
+          <h1 className={`font-semibold px-5 transition-all duration-500 ${selectedProgram ? 'text-2xl' : 'my-4 text-3xl'}`}>Results</h1>
+          {
+            <div className="flex">
+              <h1 className="text-sm font-semibold px-5 ">{selectedProgram?.name}</h1>
+              <h1 className="text-sm font-semibold px-5 mb-2">{selectedProgram?.category?.name}</h1>
+            </div>
+          }
           <hr className="border" />
         </div>
         {/* sort buttons */}
@@ -172,7 +174,7 @@ export default function FirstRowFirstCard(props: Props) {
           {filteredSelectedProgram ?
             (
               filteredSelectedProgram.candidateProgramme?.map((candidate, index) => {
-                if(!candidate.position && !candidate.grade){
+                if (!candidate.position && !candidate.grade) {
                   return <div></div>
                 }
                 return (
@@ -186,14 +188,14 @@ export default function FirstRowFirstCard(props: Props) {
 
                     }
                     <div className="flex items-center h-14 min-h-[3.5rem] w-full text-xs bg-[#F6DEFF] rounded-xl">
-                      <p className="ml-8 w-[15%] font-bold">{candidate.position?.value}{candidate.position?.value == 1 ? 'st' : candidate.position?.value == 2 ? 'nd' : candidate.position?.value == 3 ? 'rd' : ''  }  </p>
+                      <p className="ml-8 w-[15%] font-bold">{candidate.position?.value}{candidate.position?.value == 1 ? 'st' : candidate.position?.value == 2 ? 'nd' : candidate.position?.value == 3 ? 'rd' : ''}  </p>
                       <p className=" ml-4 w-[10%]"> {candidate.candidate?.chestNO}</p>
-                      <p className=" ml-4 w-[50%]">{ selectedProgram?.type  == Types.Group ?
+                      <p className=" ml-4 w-[50%]">{selectedProgram?.type == Types.Group ?
                         candidate.candidate?.name + " & team" :
-                        selectedProgram?.type  == Types.Single ?
+                        selectedProgram?.type == Types.Single ?
                           candidate.candidate?.name :
                           candidate.candidate?.team?.name
-                        }</p>
+                      }</p>
                       <p className=" ml-4 w-[20%]">{candidate.candidate?.team?.name}</p>
                       <p className=" ml-4 w-[8%]">{candidate.grade?.name}</p>
                     </div>

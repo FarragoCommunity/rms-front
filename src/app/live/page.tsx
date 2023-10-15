@@ -9,12 +9,15 @@ import {
   Programme,
   Team,
 } from "@/gql/graphql";
-import { API_KEY, FIREBASE_CONFIG } from "@/lib/env";
+import { API_KEY } from "@/lib/env";
 import { getUrqlClient } from "@/lib/urql";
 import { useEffect, useRef, useState } from "react";
 import Live from "@/components/live/Live";
-import { useRouter } from "next/navigation";
 var firebasedb = require("firebase/database");
+import { useRouter } from "next/navigation";
+import { useGlobalContext } from "@/context/context";
+import NProgress from "nprogress";
+// import "./styles/nprogress.css";
 
 export default function page({ params }: { params: { chestNo: string } }) {
   // const { client } = getUrqlClient();
@@ -30,8 +33,12 @@ export default function page({ params }: { params: { chestNo: string } }) {
   const [programs, setPrograms] = useState<any>([]);
   const [value, setValue] = useState<any>();
   const timeoutRef = useRef<any>(null);
+  const [routerButtonClicked, setRouterButtonClicked] = useState(false);
+  NProgress.configure({ showSpinner: false });
 
-  const router = useRouter()
+  const router = useRouter();
+
+  const { data, setData } = useGlobalContext();
 
   function resetTimeout() {
     if (timeoutRef.current) {
@@ -39,9 +46,9 @@ export default function page({ params }: { params: { chestNo: string } }) {
     }
   }
 
-  const [FirstCnd, setFirstCnd] = useState<CandidateProgramme>()
-  const [ScndtCnd, setScndCnd] = useState<CandidateProgramme>()
-  const [ThrdtCnd, setThrdCnd] = useState<CandidateProgramme>()
+  const [FirstCnd, setFirstCnd] = useState<CandidateProgramme>();
+  const [ScndtCnd, setScndCnd] = useState<CandidateProgramme>();
+  const [ThrdtCnd, setThrdCnd] = useState<CandidateProgramme>();
 
   useEffect(() => {
     resetTimeout();
@@ -95,16 +102,28 @@ export default function page({ params }: { params: { chestNo: string } }) {
     });
   }, []);
 
+  useEffect(() => {
+    console.log(routerButtonClicked);
+
+    routerButtonClicked ? NProgress.start() : null;
+  }, [routerButtonClicked]);
+
   return (
     <main className="bg-primary lg:bg-accent">
       <button
-        onClick={() => router.push('/')}
+        onClick={() => {
+          setRouterButtonClicked(true);
+          router.push("/");
+        }}
         type="button"
         data-te-ripple-init=""
         data-te-ripple-color="light"
         className="inline-block fixed top-5 right-8 bg-white hover:bg-gray-300 rounded-full md:bg-primary p-2 uppercase leading-normal text-white md:shadow-black shadow-white shadow-[0_4px_9px_-4px_#3b71ca] md:hover:bg-secondary transition duration-150 ease-in-out hover:shadow-[0_8px_9px_-4px_rgba(59,113,202,0.3),0_4px_18px_0_rgba(59,113,202,0.2)]"
       >
-        <svg className="h-6 w-6  lg:w-8 lg:h-8 md:fill-white fill-primary" viewBox="0 -960 960 960">
+        <svg
+          className="h-6 w-6  lg:w-8 lg:h-8 md:fill-white fill-primary"
+          viewBox="0 -960 960 960"
+        >
           <path d="M240-200h120v-240h240v240h120v-360L480-740 240-560v360Zm-80 80v-480l320-240 320 240v480H520v-240h-80v240H160Zm320-350Z" />
         </svg>
       </button>
@@ -130,19 +149,27 @@ export default function page({ params }: { params: { chestNo: string } }) {
           {programs.map((item: any) => {
             return (
               <>
-
                 {item == "show end" ? (
-                  <div className="bg-white h-[120%] w-full rounded-t-large inline-block">
+                  <div className="bg-white h-full w-full rounded-t-large inline-block">
                     <div className="h-[84%] w-full pt-8 leading-tight text-center">
-                      <div className="h-[14%] relative">
-                        <h1 className="text-2xl font-extrabold px-6 text-primary absolute top-[350%] left-1/2 -translate-x-1/2">
+                      <div className="h-[14%] relative top-1/2 -translate-y-1/2  flex flex-col justify-center items-center">
+                        <h1 className="text-2xl font-medium px-6 text-primary mb-2">
                           {"No results are live"}
                         </h1>
+                        <p
+                          onClick={() => {
+                            setRouterButtonClicked(true);
+                            router.push(`${data.admin ? "/admin" : "/"}`);
+                          }}
+                          className="rounded-md bg-secondary px-3.5 py-2.5 text-xs font-semibold text-white shadow-sm hover:bg-primary focus-visible:outline focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-secodarybg-secondary cursor-pointer"
+                        >
+                          Go back home
+                        </p>
                       </div>
                     </div>
                   </div>
                 ) : item == "display congratulations" ? (
-                  <div className="bg-white h-[120%] w-full rounded-t-large inline-block">
+                  <div className="bg-white h-full w-full rounded-t-large inline-block">
                     <div className="h-[84%] w-full pt-8 leading-tight text-center">
                       <div className="h-[14%] relative">
                         <h1 className="text-2xl font-extrabold px-6 text-primary absolute top-[350%] left-1/2 -translate-x-1/2">
@@ -169,140 +196,151 @@ export default function page({ params }: { params: { chestNo: string } }) {
                       <div className="h-[100%] overflow-y-auto pb-5 md:mt-10">
                         <div className="flex justify-center">
                           {/* first */}
-                          {
-                            item?.candidateProgramme?.map((itm: CandidateProgramme, i: number) => {
+                          {item?.candidateProgramme?.map(
+                            (itm: CandidateProgramme, i: number) => {
                               if (itm.position?.value === 1) {
-                                return <div className="relative md:h-72 md:w-72 h-64 w-64 mt-5 md:mt-0">
-                                  <div className="bg-green-500 md:h-8 md:w-8 h-5 w-5 rounded-full absolute left-1/2 translate-x-8 top-[2%] flex justify-center items-center">
-                                    <h1 className="text-[10px] md:text-base font-semibold text-white">
-                                      #1
-                                    </h1>
-                                  </div>
-                                  <div className="bg-green-500 h-4 md:h-6 rounded-xl absolute left-1/2 -translate-x-1/2 top-1/2 md:top-[25%] md:translate-y-[7.6rem] flex justify-center items-center">
-                                    <h1 className="text-[8px] md:text-sm font-semibold text-white px-2">
-                                      {itm?.candidate?.chestNO}
-                                    </h1>
-                                  </div>
-                                  <div className="md:h-52 h-32 w-32 md:w-52 gbg-gray-100 rounded-full mx-auto">
-                                    <img
-                                      src={
-                                        itm.candidate?.imageId
-                                          ? `https://drive.google.com/uc?export=view&id=${itm.candidate?.imageId}`
-                                          : "/img/avatar.jpg"
-                                      }
-                                      className="rounded-full md:h-52 h-32 mx-auto mt-6"
-                                      alt=""
-                                    />
-                                  </div>
+                                return (
+                                  <div className="relative md:h-72 md:w-72 h-64 w-64 mt-5 md:mt-0">
+                                    <div className="bg-green-500 md:h-8 md:w-8 h-5 w-5 rounded-full absolute left-1/2 translate-x-8 top-[2%] flex justify-center items-center">
+                                      <h1 className="text-[10px] md:text-base font-semibold text-white">
+                                        #1
+                                      </h1>
+                                    </div>
+                                    <div className="bg-green-500 h-4 md:h-6 rounded-xl absolute left-1/2 -translate-x-1/2 top-1/2 md:top-[25%] md:translate-y-[7.6rem] flex justify-center items-center">
+                                      <h1 className="text-[8px] md:text-sm font-semibold text-white px-2">
+                                        {itm?.candidate?.chestNO}
+                                      </h1>
+                                    </div>
+                                    <div className="md:h-52 h-32 w-32 md:w-52 gbg-gray-100 rounded-full mx-auto">
+                                      <img
+                                        src={
+                                          itm.candidate?.imageId
+                                            ? `https://drive.google.com/uc?export=view&id=${itm.candidate?.imageId}`
+                                            : "/img/avatar.jpg"
+                                        }
+                                        className="rounded-full md:h-52 h-32 mx-auto mt-6"
+                                        alt=""
+                                      />
+                                    </div>
 
-                                  <h1 className="md:text-base text-xs mt-2 md:mt-4">
-                                    {itm?.candidate?.name}
-                                  </h1>
-                                  <h1 className="text-[10px] md:text-xs">
-                                    Team <span className="font-bold"> {itm?.candidate?.team?.name}</span>
-                                  </h1>
-                                  <h1 className="text-[10px] md:text-xs font-semibold">
-                                    {/* Grade {itm?.grade ? itm?.grade?.name : '-' } */}
-                                  </h1>
-                                </div>
+                                    <h1 className="md:text-base text-xs mt-2 md:mt-4">
+                                      {itm?.candidate?.name}
+                                    </h1>
+                                    <h1 className="text-[10px] md:text-xs">
+                                      Team{" "}
+                                      <span className="font-bold">
+                                        {" "}
+                                        {itm?.candidate?.team?.name}
+                                      </span>
+                                    </h1>
+                                    <h1 className="text-[10px] md:text-xs font-semibold">
+                                      {/* Grade {itm?.grade ? itm?.grade?.name : '-' } */}
+                                    </h1>
+                                  </div>
+                                );
                               }
-                              return
-                            })
-                          }
-
+                              return;
+                            }
+                          )}
                         </div>
-
 
                         <div className="flex justify-center -mt-10 md:mt-2">
-
-
                           {/* sec */}
-                          {
-                            item?.candidateProgramme?.map((itm: CandidateProgramme, i: number) => {
+                          {item?.candidateProgramme?.map(
+                            (itm: CandidateProgramme, i: number) => {
                               if (itm.position?.value === 2) {
-                                return <div className="relative md:h-72 md:w-72 h-64 w-64 mt-5 md:mt-0">
-                                  <div className="bg-green-500 md:h-8 md:w-8 h-5 w-5 rounded-full absolute left-1/2 translate-x-8 top-[2%] flex justify-center items-center">
-                                    <h1 className="text-[10px] md:text-base font-semibold text-white">
-                                      #2
-                                    </h1>
-                                  </div>
-                                  <div className="bg-green-500 h-4 md:h-6 rounded-xl absolute left-1/2 -translate-x-1/2 top-1/2 md:top-[25%] md:translate-y-[7.6rem] flex justify-center items-center">
-                                    <h1 className="text-[8px] md:text-sm font-semibold text-white px-2">
-                                      {itm?.candidate?.chestNO}
-                                    </h1>
-                                  </div>
-                                  <div className="md:h-52 h-32 w-32 md:w-52 gbg-gray-100 rounded-full mx-auto">
-                                    <img
-                                      src={
-                                        itm.candidate?.imageId
-                                          ? `https://drive.google.com/uc?export=view&id=${itm.candidate?.imageId}`
-                                          : "/img/avatar.jpg"
-                                      }
-                                      className="rounded-full md:h-52 h-32 mx-auto mt-6"
-                                      alt=""
-                                    />
-                                  </div>
+                                return (
+                                  <div className="relative md:h-72 md:w-72 h-64 w-64 mt-5 md:mt-0">
+                                    <div className="bg-green-500 md:h-8 md:w-8 h-5 w-5 rounded-full absolute left-1/2 translate-x-8 top-[2%] flex justify-center items-center">
+                                      <h1 className="text-[10px] md:text-base font-semibold text-white">
+                                        #2
+                                      </h1>
+                                    </div>
+                                    <div className="bg-green-500 h-4 md:h-6 rounded-xl absolute left-1/2 -translate-x-1/2 top-1/2 md:top-[25%] md:translate-y-[7.6rem] flex justify-center items-center">
+                                      <h1 className="text-[8px] md:text-sm font-semibold text-white px-2">
+                                        {itm?.candidate?.chestNO}
+                                      </h1>
+                                    </div>
+                                    <div className="md:h-52 h-32 w-32 md:w-52 gbg-gray-100 rounded-full mx-auto">
+                                      <img
+                                        src={
+                                          itm.candidate?.imageId
+                                            ? `https://drive.google.com/uc?export=view&id=${itm.candidate?.imageId}`
+                                            : "/img/avatar.jpg"
+                                        }
+                                        className="rounded-full md:h-52 h-32 mx-auto mt-6"
+                                        alt=""
+                                      />
+                                    </div>
 
-                                  <h1 className="md:text-base text-xs mt-2 md:mt-4">
-                                    {itm?.candidate?.name}
-                                  </h1>
-                                  <h1 className="text-[10px] md:text-xs">
-                                    Team <span className="font-bold"> {itm?.candidate?.team?.name}</span>
-                                  </h1>
-                                  <h1 className="text-[10px] md:text-xs font-semibold">
-                                    {/* Grade {itm?.grade ? itm?.grade?.name : '-' } */}
-                                  </h1>
-                                </div>
+                                    <h1 className="md:text-base text-xs mt-2 md:mt-4">
+                                      {itm?.candidate?.name}
+                                    </h1>
+                                    <h1 className="text-[10px] md:text-xs">
+                                      Team{" "}
+                                      <span className="font-bold">
+                                        {" "}
+                                        {itm?.candidate?.team?.name}
+                                      </span>
+                                    </h1>
+                                    <h1 className="text-[10px] md:text-xs font-semibold">
+                                      {/* Grade {itm?.grade ? itm?.grade?.name : '-' } */}
+                                    </h1>
+                                  </div>
+                                );
                               }
-                              return
-                            })
-                          }
-
+                              return;
+                            }
+                          )}
 
                           {/* thir */}
-                          {
-                            item?.candidateProgramme?.map((itm: CandidateProgramme, i: number) => {
+                          {item?.candidateProgramme?.map(
+                            (itm: CandidateProgramme, i: number) => {
                               if (itm.position?.value === 3) {
-                                return <div className="relative md:h-72 md:w-72 h-64 w-64 mt-5 md:mt-0">
-                                  <div className="bg-green-500 md:h-8 md:w-8 h-5 w-5 rounded-full absolute left-1/2 translate-x-8 top-[2%] flex justify-center items-center">
-                                    <h1 className="text-[10px] md:text-base font-semibold text-white">
-                                      #3
-                                    </h1>
-                                  </div>
-                                  <div className="bg-green-500 h-4 md:h-6 rounded-xl absolute left-1/2 -translate-x-1/2 top-1/2 md:top-[25%] md:translate-y-[7.6rem] flex justify-center items-center">
-                                    <h1 className="text-[8px] md:text-sm font-semibold text-white px-2">
-                                      {itm?.candidate?.chestNO}
-                                    </h1>
-                                  </div>
-                                  <div className="md:h-52 h-32 w-32 md:w-52 gbg-gray-100 rounded-full mx-auto">
-                                    <img
-                                      src={
-                                        itm.candidate?.imageId
-                                          ? `https://drive.google.com/uc?export=view&id=${itm.candidate?.imageId}`
-                                          : "/img/avatar.jpg"
-                                      }
-                                      className="rounded-full md:h-52 h-32 mx-auto mt-6"
-                                      alt=""
-                                    />
-                                  </div>
+                                return (
+                                  <div className="relative md:h-72 md:w-72 h-64 w-64 mt-5 md:mt-0">
+                                    <div className="bg-green-500 md:h-8 md:w-8 h-5 w-5 rounded-full absolute left-1/2 translate-x-8 top-[2%] flex justify-center items-center">
+                                      <h1 className="text-[10px] md:text-base font-semibold text-white">
+                                        #3
+                                      </h1>
+                                    </div>
+                                    <div className="bg-green-500 h-4 md:h-6 rounded-xl absolute left-1/2 -translate-x-1/2 top-1/2 md:top-[25%] md:translate-y-[7.6rem] flex justify-center items-center">
+                                      <h1 className="text-[8px] md:text-sm font-semibold text-white px-2">
+                                        {itm?.candidate?.chestNO}
+                                      </h1>
+                                    </div>
+                                    <div className="md:h-52 h-32 w-32 md:w-52 gbg-gray-100 rounded-full mx-auto">
+                                      <img
+                                        src={
+                                          itm.candidate?.imageId
+                                            ? `https://drive.google.com/uc?export=view&id=${itm.candidate?.imageId}`
+                                            : "/img/avatar.jpg"
+                                        }
+                                        className="rounded-full md:h-52 h-32 mx-auto mt-6"
+                                        alt=""
+                                      />
+                                    </div>
 
-                                  <h1 className="md:text-base text-xs mt-2 md:mt-4">
-                                    {itm?.candidate?.name}
-                                  </h1>
-                                  <h1 className="text-[10px] md:text-xs">
-                                    Team <span className="font-bold"> {itm?.candidate?.team?.name}</span>
-                                  </h1>
-                                  <h1 className="text-[10px] md:text-xs font-semibold">
-                                    {/* Grade {itm?.grade ? itm?.grade?.name : '-' } */}
-                                  </h1>
-                                </div>
+                                    <h1 className="md:text-base text-xs mt-2 md:mt-4">
+                                      {itm?.candidate?.name}
+                                    </h1>
+                                    <h1 className="text-[10px] md:text-xs">
+                                      Team{" "}
+                                      <span className="font-bold">
+                                        {" "}
+                                        {itm?.candidate?.team?.name}
+                                      </span>
+                                    </h1>
+                                    <h1 className="text-[10px] md:text-xs font-semibold">
+                                      {/* Grade {itm?.grade ? itm?.grade?.name : '-' } */}
+                                    </h1>
+                                  </div>
+                                );
                               }
-                              return
-                            })
-                          }
-
+                              return;
+                            }
+                          )}
                         </div>
-
                         {/* grades */}
                         {/* <div className="md:h-72  h-64 mx-auto -mt-24 md:mt-0  md:p-10 p-5">
                           <div className="flex items-center h-20 justify-center">
@@ -384,7 +422,6 @@ export default function page({ params }: { params: { chestNo: string } }) {
                 style={{ transform: `translate3d(${-index * 100}%, 0, 0)` }}
               >
                 {programs.map((item: any) => {
-
                   // const FirstCndN = item?.candidateProgramme?.find((itm : CandidateProgramme , i : number )=>{
                   //   return itm.position?.value === 1
                   // })
@@ -403,16 +440,25 @@ export default function page({ params }: { params: { chestNo: string } }) {
 
                   // setFirstCnd(ThrdCndM)
 
-
-
                   console.log(item);
 
                   return (
                     <div className="bg-white h-[78%] w-full rounded-[2rem] text-center pt-2 lg:pt-5 overflow-hidden inline-block">
                       {item == "show end" ? (
-                        <h1 className="text-4xl lg:text-3xl 2xl:text-5xl font-semibold relative top-1/2 -translate-y-1/2">
-                          {"No results are live"}
-                        </h1>
+                        <div className="relative top-1/2 -translate-y-1/2 flex flex-col justify-center items-center">
+                          <h1 className="text-4xl lg:text-3xl 2xl:text-5xl font-semibold lg:mb-2 2xl:mb-4">
+                            {"No results are live"}
+                          </h1>
+                          <p
+                            onClick={() => {
+                              setRouterButtonClicked(true);
+                              router.push(`${data.admin ? "/admin" : "/"}`);
+                            }}
+                            className="rounded-md bg-secondary px-3.5 py-2.5 lg:text-sm 2xl:text-base font-semibold text-white shadow-sm hover:bg-primary focus-visible:outline focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-secodarybg-secondary cursor-pointer"
+                          >
+                            Go back home
+                          </p>
+                        </div>
                       ) : item == "display congratulations" ? (
                         <h1 className="text-4xl lg:text-3xl 2xl:text-5xl font-semibold relative top-1/2 -translate-y-1/2">
                           {"Congratulations for all team"}
@@ -420,139 +466,137 @@ export default function page({ params }: { params: { chestNo: string } }) {
                       ) : (
                         <>
                           <h1 className="text-4xl lg:text-3xl 2xl:text-5xl font-semibold">
-                            {item.name ? item.name : ''}
+                            {item.name ? item.name : ""}
                           </h1>
                           <h1 className="text-3xl lg:text-2xl 2xl:text-2xl font-semibold">
-                            {item.category.name ? item.category.name : ''}
+                            {item.category.name ? item.category.name : ""}
                           </h1>
                           <div className="h-[60%] whitespace-nowrap overflow-hidden">
-
-
-
-                            {
-                              item?.candidateProgramme?.map((itm: CandidateProgramme, i: number) => {
+                            {item?.candidateProgramme?.map(
+                              (itm: CandidateProgramme, i: number) => {
                                 if (itm.position?.value === 1) {
-                                  return <div className="w-72 h-full inline-block text-center relative">
-                                    <div className="bg-green-500 h-10 w-10 rounded-full absolute left-1/2 translate-x-12 top-6 flex items-center justify-center">
-                                      <h1 className="font-semibold text-white 2xl:text-base">
-                                        #1
-                                      </h1>
+                                  return (
+                                    <div className="w-72 h-full inline-block text-center relative">
+                                      <div className="bg-green-500 h-10 w-10 rounded-full absolute left-1/2 translate-x-12 top-6 flex items-center justify-center">
+                                        <h1 className="font-semibold text-white 2xl:text-base">
+                                          #1
+                                        </h1>
+                                      </div>
+                                      <div className="bg-green-500 h-6 rounded-full absolute left-1/2 -translate-x-1/2 top-[65%] 2xl:top-[65%] flex items-center justify-center">
+                                        <h1 className="font-semibold text-white text-sm px-2">
+                                          {itm?.candidate?.chestNO}
+                                        </h1>
+                                      </div>
+                                      <div className="h-36 2xl:h-64 w-36 2xl:w-64 gbg-gray-100 rounded-full mx-auto">
+                                        <img
+                                          src={
+                                            itm.candidate?.imageId
+                                              ? `https://drive.google.com/uc?export=view&id=${itm.candidate?.imageId}`
+                                              : "/img/avatar.jpg"
+                                          }
+                                          className="rounded-full h-36 2xl:h-64 mx-auto mt-6"
+                                          alt=""
+                                        />
+                                      </div>
+                                      <p className="absolute left-1/2 -translate-x-1/2 top-[73%] 2xl:top-[70%]">
+                                        {itm?.candidate?.name}
+                                      </p>
+                                      <p className="absolute left-1/2 -translate-x-1/2 text-sm top-[80%] 2xl:top-[75%]">
+                                        Team {itm?.candidate?.team?.name}
+                                      </p>
+                                      <p className="absolute left-1/2 -translate-x-1/2 text-sm top-[85%] 2xl:top-[80%]">
+                                        {/* Grade <span className="font-semibold">{itm?.grade?.name}</span> */}
+                                      </p>
                                     </div>
-                                    <div className="bg-green-500 h-6 rounded-full absolute left-1/2 -translate-x-1/2 top-[65%] 2xl:top-[65%] flex items-center justify-center">
-                                      <h1 className="font-semibold text-white text-sm px-2">
-                                        {itm?.candidate?.chestNO}
-                                      </h1>
-                                    </div>
-                                    <div className="h-36 2xl:h-64 w-36 2xl:w-64 gbg-gray-100 rounded-full mx-auto">
-                                      <img
-                                        src={
-                                          itm.candidate?.imageId
-                                            ? `https://drive.google.com/uc?export=view&id=${itm.candidate?.imageId}`
-                                            : "/img/avatar.jpg"
-                                        }
-                                        className="rounded-full h-36 2xl:h-64 mx-auto mt-6"
-                                        alt=""
-                                      />
-                                    </div>
-                                    <p className="absolute left-1/2 -translate-x-1/2 top-[73%] 2xl:top-[70%]">
-                                      {itm?.candidate?.name}
-                                    </p>
-                                    <p className="absolute left-1/2 -translate-x-1/2 text-sm top-[80%] 2xl:top-[75%]">
-                                      Team {itm?.candidate?.team?.name}
-                                    </p>
-                                    <p className="absolute left-1/2 -translate-x-1/2 text-sm top-[85%] 2xl:top-[80%]">
-                                      {/* Grade <span className="font-semibold">{itm?.grade?.name}</span> */}
-                                    </p>
-                                  </div>
+                                  );
                                 }
-                                return
-                              })
-                            }
+                                return;
+                              }
+                            )}
 
-                            {
-                              item?.candidateProgramme?.map((itm: CandidateProgramme, i: number) => {
+                            {item?.candidateProgramme?.map(
+                              (itm: CandidateProgramme, i: number) => {
                                 if (itm.position?.value === 2) {
-                                  return <div className="w-72 h-full inline-block text-center relative">
-                                    <div className="bg-green-500 h-10 w-10 rounded-full absolute left-1/2 translate-x-12 top-6 flex items-center justify-center">
-                                      <h1 className="font-semibold text-white 2xl:text-base">
-                                        #2
-                                      </h1>
+                                  return (
+                                    <div className="w-72 h-full inline-block text-center relative">
+                                      <div className="bg-green-500 h-10 w-10 rounded-full absolute left-1/2 translate-x-12 top-6 flex items-center justify-center">
+                                        <h1 className="font-semibold text-white 2xl:text-base">
+                                          #2
+                                        </h1>
+                                      </div>
+                                      <div className="bg-green-500 h-6 rounded-full absolute left-1/2 -translate-x-1/2 top-[65%] 2xl:top-[65%] flex items-center justify-center">
+                                        <h1 className="font-semibold text-white text-sm px-2">
+                                          {itm?.candidate?.chestNO}
+                                        </h1>
+                                      </div>
+                                      <div className="h-36 2xl:h-64 w-36 2xl:w-64 gbg-gray-100 rounded-full mx-auto">
+                                        <img
+                                          src={
+                                            itm.candidate?.imageId
+                                              ? `https://drive.google.com/uc?export=view&id=${itm.candidate?.imageId}`
+                                              : "/img/avatar.jpg"
+                                          }
+                                          className="rounded-full h-36 2xl:h-64 mx-auto mt-6"
+                                          alt=""
+                                        />
+                                      </div>
+                                      <p className="absolute left-1/2 -translate-x-1/2 top-[73%] 2xl:top-[70%]">
+                                        {itm?.candidate?.name}
+                                      </p>
+                                      <p className="absolute left-1/2 -translate-x-1/2 text-sm top-[80%] 2xl:top-[75%]">
+                                        Team {itm?.candidate?.team?.name}
+                                      </p>
+                                      <p className="absolute left-1/2 -translate-x-1/2 text-sm top-[85%] 2xl:top-[80%]">
+                                        {/* Grade <span className="font-semibold">{itm?.grade?.name}</span> */}
+                                      </p>
                                     </div>
-                                    <div className="bg-green-500 h-6 rounded-full absolute left-1/2 -translate-x-1/2 top-[65%] 2xl:top-[65%] flex items-center justify-center">
-                                      <h1 className="font-semibold text-white text-sm px-2">
-                                        {itm?.candidate?.chestNO}
-                                      </h1>
-                                    </div>
-                                    <div className="h-36 2xl:h-64 w-36 2xl:w-64 gbg-gray-100 rounded-full mx-auto">
-                                      <img
-                                        src={
-                                          itm.candidate?.imageId
-                                            ? `https://drive.google.com/uc?export=view&id=${itm.candidate?.imageId}`
-                                            : "/img/avatar.jpg"
-                                        }
-                                        className="rounded-full h-36 2xl:h-64 mx-auto mt-6"
-                                        alt=""
-                                      />
-                                    </div>
-                                    <p className="absolute left-1/2 -translate-x-1/2 top-[73%] 2xl:top-[70%]">
-                                      {itm?.candidate?.name}
-                                    </p>
-                                    <p className="absolute left-1/2 -translate-x-1/2 text-sm top-[80%] 2xl:top-[75%]">
-                                      Team {itm?.candidate?.team?.name}
-                                    </p>
-                                    <p className="absolute left-1/2 -translate-x-1/2 text-sm top-[85%] 2xl:top-[80%]">
-                                      {/* Grade <span className="font-semibold">{itm?.grade?.name}</span> */}
-                                    </p>
-                                  </div>
+                                  );
                                 }
-                                return
-                              })
-                            }
+                                return;
+                              }
+                            )}
 
-                            {
-                              item?.candidateProgramme?.map((itm: CandidateProgramme, i: number) => {
+                            {item?.candidateProgramme?.map(
+                              (itm: CandidateProgramme, i: number) => {
                                 if (itm.position?.value === 3) {
-                                  return <div className="w-72 h-full inline-block text-center relative">
-                                    <div className="bg-green-500 h-10 w-10 rounded-full absolute left-1/2 translate-x-12 top-6 flex items-center justify-center">
-                                      <h1 className="font-semibold text-white 2xl:text-base">
-                                        #3
-                                      </h1>
+                                  return (
+                                    <div className="w-72 h-full inline-block text-center relative">
+                                      <div className="bg-green-500 h-10 w-10 rounded-full absolute left-1/2 translate-x-12 top-6 flex items-center justify-center">
+                                        <h1 className="font-semibold text-white 2xl:text-base">
+                                          #3
+                                        </h1>
+                                      </div>
+                                      <div className="bg-green-500 h-6 rounded-full absolute left-1/2 -translate-x-1/2 top-[65%] 2xl:top-[65%] flex items-center justify-center">
+                                        <h1 className="font-semibold text-white text-sm px-2">
+                                          {itm?.candidate?.chestNO}
+                                        </h1>
+                                      </div>
+                                      <div className="h-36 2xl:h-64 w-36 2xl:w-64 gbg-gray-100 rounded-full mx-auto">
+                                        <img
+                                          src={
+                                            itm.candidate?.imageId
+                                              ? `https://drive.google.com/uc?export=view&id=${itm.candidate?.imageId}`
+                                              : "/img/avatar.jpg"
+                                          }
+                                          className="rounded-full h-36 2xl:h-64 mx-auto mt-6"
+                                          alt=""
+                                        />
+                                      </div>
+                                      <p className="absolute left-1/2 -translate-x-1/2 top-[73%] 2xl:top-[70%]">
+                                        {itm?.candidate?.name}
+                                      </p>
+                                      <p className="absolute left-1/2 -translate-x-1/2 text-sm top-[80%] 2xl:top-[75%]">
+                                        Team {itm?.candidate?.team?.name}
+                                      </p>
+                                      <p className="absolute left-1/2 -translate-x-1/2 text-sm top-[85%] 2xl:top-[80%]">
+                                        {/* Grade <span className="font-semibold">{itm?.grade?.name}</span> */}
+                                      </p>
                                     </div>
-                                    <div className="bg-green-500 h-6 rounded-full absolute left-1/2 -translate-x-1/2 top-[65%] 2xl:top-[65%] flex items-center justify-center">
-                                      <h1 className="font-semibold text-white text-sm px-2">
-                                        {itm?.candidate?.chestNO}
-                                      </h1>
-                                    </div>
-                                    <div className="h-36 2xl:h-64 w-36 2xl:w-64 gbg-gray-100 rounded-full mx-auto">
-                                      <img
-                                        src={
-                                          itm.candidate?.imageId
-                                            ? `https://drive.google.com/uc?export=view&id=${itm.candidate?.imageId}`
-                                            : "/img/avatar.jpg"
-                                        }
-                                        className="rounded-full h-36 2xl:h-64 mx-auto mt-6"
-                                        alt=""
-                                      />
-                                    </div>
-                                    <p className="absolute left-1/2 -translate-x-1/2 top-[73%] 2xl:top-[70%]">
-                                      {itm?.candidate?.name}
-                                    </p>
-                                    <p className="absolute left-1/2 -translate-x-1/2 text-sm top-[80%] 2xl:top-[75%]">
-                                      Team {itm?.candidate?.team?.name}
-                                    </p>
-                                    <p className="absolute left-1/2 -translate-x-1/2 text-sm top-[85%] 2xl:top-[80%]">
-                                      {/* Grade <span className="font-semibold">{itm?.grade?.name}</span> */}
-                                    </p>
-                                  </div>
+                                  );
                                 }
-                                return
-                              })
-
-                            }
-
-
-
-
+                                return;
+                              }
+                            )}
                           </div>
 
                           {/* grades */}
@@ -589,8 +633,6 @@ export default function page({ params }: { params: { chestNo: string } }) {
                           </div> */}
                         </>
                       )}
-
-
                     </div>
                   );
                 })}

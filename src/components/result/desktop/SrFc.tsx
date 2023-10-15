@@ -45,7 +45,7 @@ export default function SecondRowFirstCard(props: Props) {
             {
               props.categories.map((category, index) => {
                 // last category no need to show
-                if (index == props.categories.length - 1) {
+                if (index == props.categories.length - 1 || category.name == 'THANAWIYYA') {
                   return
                 }
                 return (
