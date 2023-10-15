@@ -503,6 +503,20 @@ const Result = (props: Props) => {
     return categoryForTotal;
   };
 
+  // const sortByNestedKey = (array : any, key : any) => {
+  //   return array.sort((a : any, b : any) => {
+  //     const valueA = a[key].name.toUpperCase(); // Access the nested key
+  //     const valueB = b[key].name.toUpperCase();
+  
+  //     if (valueA < valueB) {
+  //       return -1;
+  //     }
+  //     if (valueA > valueB) {
+  //       return 1;
+  //     }
+  //     return 0;
+  //   });
+  // };
 
   const downloadTotalPoints = () => {
 
@@ -531,7 +545,46 @@ const Result = (props: Props) => {
     doc.setFontSize(10);
     doc.setTextColor(0, 0, 0); // Set text color to black
 
-    // doc.text(`${a.programCode}`, 125, 205);
+    let sortedCateogryTotal : CategoryForTotal[] =  categoryForTotal.sort((a,b)=>{
+      return a.name.localeCompare(b.name)
+    })
+
+
+    var catNameLineX = 45
+    var catNameLineY = 282
+    var tmNameLineX = 108
+    var tmNameLineY = 260
+    var diff = 26.5
+    var difftm = 39.5 
+    sortedCateogryTotal.map((cat , i)=>{
+      // doc.setFont("Montserrat" , 'bold')
+      doc.text(`${cat.name}`, catNameLineX, catNameLineY +( diff * i))
+
+      
+
+        cat.teams.map((tm,ii)=>{
+          doc.setFont('Montserrat', 'normal')
+          doc.setFontSize(10);
+          doc.setTextColor(0, 0, 0);
+          if(i == 0){
+            doc.setFontSize(8);
+          doc.text(`${tm.name}`, tmNameLineX  +( difftm * ii), tmNameLineY)
+          doc.text(`${tm.name}`, 260  +( difftm * ii), tmNameLineY)
+        }
+       
+        doc.text(`${tm.lastArtsResult}`, (tmNameLineX  +( difftm * ii)  + 5), catNameLineY +( diff * i))
+        doc.setFont('Roboto-Bold', 'bold')
+        doc.setFontSize(10);
+        doc.setTextColor(0, 0, 0);
+        doc.text(`${tm.grandArtsResult}`, (260  +( difftm * ii)  + 5), catNameLineY +( diff * i))
+        })
+
+        doc.setFont('Montserrat', 'normal')
+        doc.setFontSize(10);
+        doc.setTextColor(0, 0, 0);
+
+    })
+
     //   doc.text(`${a.name}`, 125, 218);
     //   doc.text(`${a.category?.name}`, 345, 205);
 
