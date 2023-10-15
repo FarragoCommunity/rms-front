@@ -519,7 +519,7 @@ const Result = (props: Props) => {
 
     console.log("pdf", pdfWidth, pdfHeight);
     doc.addPage("a4");
-
+ 
     const backgroundImageUrl = "/a4result.jpg";
     // Add the background image
     doc.addImage(backgroundImageUrl, "JPEG", 0, 0, pdfWidth, pdfHeight);
@@ -530,6 +530,11 @@ const Result = (props: Props) => {
     // Add text and other content on top of the background image
     doc.setFontSize(10);
     doc.setTextColor(0, 0, 0); // Set text color to black
+
+    // doc.text(`${a.programCode}`, 125, 205);
+    //   doc.text(`${a.name}`, 125, 218);
+    //   doc.text(`${a.category?.name}`, 345, 205);
+
 
     doc.deletePage(1);
 
