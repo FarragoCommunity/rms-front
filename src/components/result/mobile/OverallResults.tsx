@@ -216,7 +216,7 @@ export default function OverallResults(props: SidebarProps) {
               const sorted = filtered.teams.sort((a,b)=>{
                 console.log(a.grandArtsResult);
                 
-               return a.grandArtsResult - b.grandArtsResult
+               return b.grandArtsResult - a.grandArtsResult
               })
 
               console.log(sorted);
@@ -257,30 +257,40 @@ export default function OverallResults(props: SidebarProps) {
                 return tm.name == chunk[1].name
                })
               return (
-                <div>
                 <div className="flex h-1/2 w-full">
-                  <div className="h-full w-1/2">
-                    <div className="w-full h-1/4 flex">
-                      <div className="h-full w-1/3 px-2 flex">
-                        <h1 className="text-3xl font-bold">#0{index == 0 ? index + 1 : index + 2}</h1>
+                <div className="h-full w-1/2">
+                  <div className="w-full h-1/4 flex">
+                    <div className="h-full w-1/3 px-2 flex">
+                      <h1 className="text-3xl font-bold">
+                        #0{index == 0 ? index + 1 : index + 2}
+                      </h1>
+                    </div>
+                    <div className="h-full w-2/3 flex flex-col items-end px-2 leading-tight justify-center">
+                      <div className="flex items-center gap-2">
+                        <span className="bg-green-400 h-1 w-1 rounded-full" />
+                        <h1 className="text-xs">
+                          Arts : {chunk[0].grandArtsResult}
+                        </h1>
                       </div>
-                      <div className="h-full w-2/3 flex flex-col items-end px-2 leading-tight justify-center">
-                        <div className="flex items-center gap-2">
-                          <span className="bg-green-400 h-1 w-1 rounded-full" />
-                          <h1 className="text-xs">Arts : {chunk[0].grandArtsResult}</h1>
-                        </div>
-                        <div className="flex items-center gap-2">
-                          <span className="bg-blue-400 h-1 w-1 rounded-full" />
-                          <h1 className="text-xs">Sports : {chunk[0].grandSportsResult}</h1>
-                        </div>
+                      <div className="flex items-center gap-2">
+                        <span className="bg-blue-400 h-1 w-1 rounded-full" />
+                        <h1 className="text-xs">
+                          Sports : {chunk[0].grandSportsResult}
+                        </h1>
                       </div>
                     </div>
-                    <div className="w-full h-3/4 px-2 pt-3">
-                      <h1 className="text-6xl  bigphone:text-7xl font-bold">{chunk[0].grandArtsResult}</h1>
-                      <div style={{ background: `${OGTeamOne?.color}` }} className="bg-black h-1/4 rounded-lg flex justify-center items-center">
-                        <h1 className="text-white font-semibold text-2xl">{chunk[0].name}</h1>
-                      </div>
-
+                  </div>
+                  <div className="w-full h-3/4 px-2 pt-3">
+                    <h1 className="text-6xl font-bold">
+                      {chunk[0].grandArtsResult}
+                    </h1>
+                    <div
+                      style={{ background: `${OGTeamOne?.color}` }}
+                      className="bg-black h-1/4 rounded-lg flex justify-center items-center"
+                    >
+                      <h1 className="text-white font-semibold text-2xl">
+                        {chunk[0].name}
+                      </h1>
                     </div>
                   </div>
                 </div>
@@ -298,24 +308,25 @@ export default function OverallResults(props: SidebarProps) {
                           Arts : {chunk[1].grandArtsResult}
                         </h1>
                       </div>
-
-                      <div className="h-full w-2/3 flex flex-col items-end px-2 leading-tight justify-center">
-                        <div className="flex items-center gap-2">
-                          <span className="bg-green-400 h-1 w-1 rounded-full" />
-                          <h1 className="text-xs">Arts : {chunk[1].grandArtsResult}</h1>
-                        </div>
-                        <div className="flex items-center gap-2">
-                          <span className="bg-blue-400 h-1 w-1 rounded-full" />
-                          <h1 className="text-xs">Sports : {chunk[1].grandSportsResult}</h1>
-                        </div>
+                      <div className="flex items-center gap-2">
+                        <span className="bg-blue-400 h-1 w-1 rounded-full" />
+                        <h1 className="text-xs">
+                          Sports : {chunk[1].grandSportsResult}
+                        </h1>
                       </div>
                     </div>
-                    <div className="w-full h-3/4 px-2 pt-3">
-                      <h1 className="text-6xl  bigphone:text-7xl font-bold">{chunk[1]?.grandArtsResult}</h1>
-                      <div style={{ background: `${OGTeamTwo?.color}` }} className=" bg-black h-1/4 rounded-lg flex justify-center items-center">
-                        <h1 className="text-white font-semibold text-2xl">{chunk[1]?.name}</h1>
-                      </div>
-
+                  </div>
+                  <div className="w-full h-3/4 px-2 pt-3">
+                    <h1 className="text-6xl font-bold">
+                      {chunk[1]?.grandArtsResult}
+                    </h1>
+                    <div
+                      style={{ background: `${OGTeamTwo?.color}` }}
+                      className=" bg-black h-1/4 rounded-lg flex justify-center items-center"
+                    >
+                      <h1 className="text-white font-semibold text-2xl">
+                        {chunk[1]?.name}
+                      </h1>
                     </div>
                   </div>
                 </div>

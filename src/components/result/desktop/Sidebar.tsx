@@ -168,7 +168,7 @@ export default function DesktopSidebar(props:SidebarProps){
               const sorted = filtered.teams.sort((a,b)=>{
                 console.log(a.grandArtsResult);
                 
-               return a.grandArtsResult - b.grandArtsResult
+                return b.grandArtsResult - a.grandArtsResult
               })
 
               console.log(sorted);
