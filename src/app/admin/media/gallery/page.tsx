@@ -29,7 +29,7 @@ const page = async () => {
     },
   ];
 
-  const result = await axios.get(`https://realia23.azurewebsites.net/gallery?${Date.now()}`, {
+  const result = await axios.get(`https://rms-mu.vercel.app/gallery?${Date.now()}`, {
     headers: {
       'Cache-Control': 'no-cache',
       'Pragma': 'no-cache',
