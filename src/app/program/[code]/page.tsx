@@ -45,13 +45,13 @@ export default async function page({ params }: { params: { code: string } }) {
 
   return (
     <main className="bg-accent w-screen h-screen ">
- <NOT_AV/>
+ {/* <NOT_AV/> */}
       {/* Mobile View */}
-      {/* <MobileView programme={programme} /> */}
+      <MobileView programme={programme} />
       {/* Tab View */}
-      {/* <TabView programme={programme} /> */}
+      <TabView programme={programme} />
       {/* Desktop View */}
-      {/* <DesktopView programme={programme} /> */}
+      <DesktopView programme={programme} />
     </main>
   );
 }

@@ -27,10 +27,15 @@ query GetAllDetailedCandidates($api_key: String!) {
     }
     id
     candidateProgrammes {
+      mark
+      point
       id
       programme {
         name
         programCode
+        model
+        type
+        mode
       }
       candidatesOfGroup {
         id
