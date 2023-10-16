@@ -162,6 +162,29 @@ const Result = (props: Props) => {
     }
   };
 
+  function calculateTotalPointsForTeams(categories : any){
+    const teamPointsArray : any = [];
+  
+    categories.forEach((category: any)=> {
+      category.teams.forEach((team : any) => {
+        const existingTeam = teamPointsArray.find((t : any) => t.name === team.name);
+  
+        if (existingTeam) {
+          existingTeam.grandArtsResult += team.grandArtsResult;
+          existingTeam.grandSportsResult += team.grandSportsResult;
+        } else {
+          teamPointsArray.push({
+            name: team.name,
+            grandArtsResult: team.grandArtsResult,
+            grandSportsResult: team.grandSportsResult
+          });
+        }
+      });
+    });
+  
+    return teamPointsArray;
+  };
+
   useEffect(() => {
     const cookie = document.cookie;
     if (cookie) {
@@ -185,13 +208,6 @@ const Result = (props: Props) => {
       );
     }
 
-    const teams = props.teams.map((team) => {
-      return {
-        name: team.name,
-        lastResult: 0,
-        grandResult: 0,
-      };
-    });
 
 
     const groupedByCategory: { [key: string]: Programme[] } = {};
@@ -264,7 +280,24 @@ const Result = (props: Props) => {
       };
     });
 
-    setBarData(teamData);
+    const brcl : {
+      name: string;
+      lastArtsResult: number;
+      grandArtsResult: number;
+      lastSportsResult: number;
+      grandSportsResult: number;
+    }[] = calculateTotalPointsForTeams(categoryForTl as any)
+
+    setBarData(brcl.map((brs, i) => {
+      return {
+        name : brs.name,
+        currentPoint : brs.lastArtsResult || 0,
+        currentSports : brs.lastSportsResult || 0,
+        totalPoint : brs.grandArtsResult || 0,
+        totalSports : brs.grandSportsResult || 0
+      }
+
+    }));
 
     // window height settings
     const windowWidth = window.innerWidth;
@@ -424,8 +457,6 @@ const Result = (props: Props) => {
 
     setToDownLoadData(downloadData as ToDownLoadData[]);
   }, []);
-
-
 
 
   const addPointToCategory = (program: Programme) => {

@@ -196,6 +196,11 @@ export default function OverallResults(props: SidebarProps) {
 
 
               const all = calculateTotalPointsForTeams(categoryForTotal)
+              all.sort((a:any,b:any)=>{
+                console.log(a.grandArtsResult);
+                
+               return b.grandArtsResult - a.grandArtsResult
+              })
 
               setSelectedCategoryForTotal({
                 name:'all',
