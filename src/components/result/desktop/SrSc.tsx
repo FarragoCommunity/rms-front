@@ -6,7 +6,7 @@ interface Props {
 }
 export default function SecondRowSecondCard(props: Props) {
   return (
-    <div className="h-[16rem] 2xl:w-[60%] w-[50%] rounded-3xl bg-[#F7F7F7] px-5">
+    <div className="h-[16rem] w-[50%] rounded-3xl bg-[#F7F7F7] px-5">
                 {/* title */}
                 <div className="w-full h-[20%] flex items-center justify-center">
                   <h1 className="text-4xl font-bold leading-none mt-2">Quick Overview</h1>

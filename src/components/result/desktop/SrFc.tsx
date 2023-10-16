@@ -12,7 +12,7 @@ export default function SecondRowFirstCard(props: Props) {
 
   
   return (
-    <div className="2xl:w-[40%] w-[50%] rounded-3xl bg-[#F7F7F7] px-5 overflow-hidden h-[16rem] ">
+    <div className="2xl:w-[50%] w-[50%] rounded-3xl bg-[#F7F7F7] px-5 overflow-hidden h-[16rem] ">
       {/* title */}
       <div className="w-full h-[30%] flex items-center justify-between">
         <h1 className="text-4xl font-semibold leading-none">
