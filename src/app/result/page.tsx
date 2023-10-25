@@ -2,11 +2,13 @@ import GalleryHeader from "@/components/GalleryHeader";
 import Header from "@/components/Header";
 import NOT_AV from "@/components/NOT_AV";
 import ResultHeader from "@/components/ResultHeader";
+import Download from "@/components/result/desktop/Download";
 import FirstRowFirstCard from "@/components/result/desktop/FrFc";
 import FirstRowSecondCard from "@/components/result/desktop/FrSc";
 import DesktopSidebar from "@/components/result/desktop/Sidebar";
 import SecondRowFirstCard from "@/components/result/desktop/SrFc";
 import SecondRowSecondCard from "@/components/result/desktop/SrSc";
+import MobileDownLoad from "@/components/result/mobile/MoblileDownLoad";
 import OverallResults from "@/components/result/mobile/OverallResults";
 import Programs from "@/components/result/mobile/Programs";
 import QuickOverview from "@/components/result/mobile/QuickOverview";
@@ -71,10 +73,10 @@ export default async function page({
   CategorBasedToppersQueryVariables
 >(CategorBasedToppersDocument, {  });
 
-  const totalPrograms = await client.query<
-  TotalProgramsCountQuery,
-  TotalProgramsCountQueryVariables
->(TotalProgramsCountDocument, {api_key: API_KEY  });
+//   const totalPrograms = await client.query<
+//   TotalProgramsCountQuery,
+//   TotalProgramsCountQueryVariables
+// >(TotalProgramsCountDocument, {api_key: API_KEY  });
 
   return (
     <main className="h-screen w-screen bg-white overflow-hidden">
@@ -117,7 +119,8 @@ export default async function page({
             <Programs teams={teams.data?.teams as Team[]} programs={result.data?.resultPublishedProgrammes as Programme[]} categories={categories.data?.categories as Category[]}/>
             {/* Quick Overview */}
             <Toppers categories={categories.data?.categories as Category[]} toppers={toppers.data?.getCategoryBasedToppers as Category[]} />
-            <QuickOverview count={(totalPrograms.data?.programmes?.length as number) || 0} programs={result.data?.resultPublishedProgrammes as Programme[]}/>
+            <MobileDownLoad/>
+            {/* <QuickOverview count={(totalPrograms.data?.programmes?.length as number) || 0} programs={result.data?.resultPublishedProgrammes as Programme[]}/> */}
           </div>
         </div>
       </div>
@@ -170,7 +173,8 @@ export default async function page({
               {/* first card second row */}
               <SecondRowFirstCard categories={categories.data?.categories as Category[]} toppers={toppers.data?.getCategoryBasedToppers as Category[]} />
               {/* second card second row */}
-              <SecondRowSecondCard count={(totalPrograms.data?.programmes?.length as number) || 0} programs={result.data?.resultPublishedProgrammes as Programme[]} />
+              <Download/>
+              {/* <SecondRowSecondCard count={(totalPrograms.data?.programmes?.length as number) || 0} programs={result.data?.resultPublishedProgrammes as Programme[]} /> */}
             </div>
             
           </div>

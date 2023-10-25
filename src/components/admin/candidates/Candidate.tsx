@@ -1,7 +1,7 @@
 "use client";
 import InfoBar from "@/components/admin/InfoBar";
 import RightSideBar from "@/components/admin/RightSideBar";
-import { Candidate, Category, Programme, Team, Types } from "@/gql/graphql";
+import { Candidate, CandidateProgramme, Category, Model, Programme, Team, Types } from "@/gql/graphql";
 import { parseJwt } from "@/lib/cryptr";
 import { SERVER_URL } from "@/lib/urql";
 import { withUrqlClient } from "next-urql";
@@ -14,7 +14,8 @@ import { PageChevronLeft, PageChevronRight } from "@/icons/pagination";
 import { AddIcon, DownLoadIcon, FilterIcon } from "@/icons/action";
 import jsPDF from "jspdf";
 import { saveAs } from "file-saver";
-
+import ExcelJS from 'exceljs';
+import { Readable } from 'stream';
 
 interface Props {
   data: {
@@ -64,23 +65,59 @@ const Candidate = (props: Props) => {
   const [itemsPerPage, setItemsPerPage] = useState<number>(7);
   const [screenHeigh, setScreenHeight] = useState<number>(400);
   const candidateRef = useRef<HTMLDivElement>(null);
+  const [dataToDownLoad, SetDataToDownLoad] = useState<{
+    name: string,
+    class: string,
+    adNo: number,
+    chestNO: string,
+    point: number
+  }[]>()
 
   useEffect(() => {
-    const cookie = document.cookie;
-    if (cookie) {
-      const token = cookie.split("=")[1];
-      const cv = parseJwt(token);
-      setData(
-        props.result.filter((item: any) =>
-          cv.categories?.includes(item.category.name)
-        ) as Candidate[]
-      );
-      setAllData(
-        props.result.filter((item: any) =>
-          cv.categories?.includes(item.category.name)
-        ) as Candidate[]
-      );
-    }
+    // const cookie = document.cookie;
+    // if (cookie) {
+    //   const token = cookie.split("=")[1];
+    //   const cv = parseJwt(token);
+    //   setData(
+    //     props.result.filter((item: any) =>
+    //       cv.categories?.includes(item.category.name)
+    //     ) as Candidate[]
+    //   );
+    //   setAllData(
+    //     props.result.filter((item: any) =>
+    //       cv.categories?.includes(item.category.name)
+    //     ) as Candidate[]
+    //   );
+    // }
+
+
+    const settedToDownLoadData = props.result.map((cand: Candidate, i) => {
+      let point = 0;
+
+      cand?.candidateProgrammes?.map((cp: CandidateProgramme, i) => {
+        if (cp.point && cp.programme?.type == Types.Single && cp.programme.model == Model.Arts) {
+          point += cp.point
+        }
+      })
+
+      return {
+        name: cand.name,
+        class: cand.class,
+        adNo: cand.adno,
+        point: point,
+        chestNO: cand.chestNO
+      }
+    })
+
+    settedToDownLoadData.sort((a: any, b: any) => {
+      return a.class.localeCompare(b.class)
+    })
+
+    console.log(settedToDownLoadData);
+
+
+    SetDataToDownLoad(settedToDownLoadData as any);
+
 
     // window height settings
     const windowWidth = window.innerWidth;
@@ -162,7 +199,7 @@ const Candidate = (props: Props) => {
   };
 
   function downloadExcel() {
-    const data = props.result;
+    const data: any = dataToDownLoad;
     const replacer = (key: any, value: any) => (value === null ? "" : value); // specify how you want to handle null values here
     const header = Object.keys(data[0]);
     let csv = data.map((row: any) =>
@@ -186,8 +223,8 @@ const Candidate = (props: Props) => {
     console.log(programme);
     console.log(data);
     console.log(allData);
-    
-    
+
+
 
 
     // Load Montserrat font
@@ -242,6 +279,193 @@ const Candidate = (props: Props) => {
 
   // console.log(allData);
 
+
+  const downloadClassTopper = async () => {
+    // const workbook = new ExcelJS.Workbook();
+    // //   console.log(workbook);
+
+    // const worksheet = workbook.addWorksheet("full");
+
+    // // const makeCenter = (cellLetters: any) => {
+    // //   cellLetters.forEach((letter: any) => {
+    // //     for (let i = 1; i < 4; i++) {
+    // //       worksheet.getCell(letter + i).alignment = {
+    // //         vertical: "middle",
+    // //         horizontal: "center",
+    // //       };
+    // //       worksheet.getCell(letter + i).border = {
+    // //         top: { style: "thick" },
+    // //         left: { style: "thick" },
+    // //         bottom: { style: "thick" },
+    // //         right: { style: "thick" },
+    // //       };
+    // //       worksheet.getCell(letter + i).font= {
+    // //         bold: true
+    // //       }
+    // //     }
+    // //   });
+    // // };
+
+
+    // // worksheet.mergeCells("A1:M1");
+    // // worksheet.mergeCells("A2:M2");
+    // // worksheet.mergeCells("B3:D3");
+    // // worksheet.mergeCells("E3:F3");
+    // // worksheet.mergeCells("G3:J3");
+    // // worksheet.mergeCells("K3:M3");
+    // // const mainTitle = worksheet.getCell("A1");
+    // // mainTitle.value = "REALIA'23";
+    // // const resultTitle = worksheet.getCell("A2");
+    // // resultTitle.value = "RESULTS";
+    // // worksheet.getCell("B3").value = "Programs";
+    // // worksheet.getCell("E3").value = "Results";
+    // // worksheet.getCell("G3").value = "Candidate";
+    // // worksheet.getCell("K3").value = "Score";
+    // // makeCenter(["A", "B", "E", "G", "K"]);
+
+    // // mainTitle.font = {
+    // //   size: 48,
+    // //   bold:true,
+    // // };
+    // // resultTitle.font = {
+    // //   size: 14,
+    // //   bold:true,
+    // // };
+
+    // // Define the columns in the Excel sheet
+
+    // const headers = [
+    //   "name",
+    //   "class", "ad no", "point", "chest no"
+    // ];
+    // const widths: any = {
+    //   A: 6,
+    //   B: 13,
+    //   C: 30,
+    //   D: 16,
+    //   E: 8,
+    //   F: 6,
+    //   G: 9,
+    //   H: 30,
+    //   I: 6,
+    //   J: 10.2,
+    //   K: 6,
+    //   L: 8,
+    //   M: 5,
+    // };
+
+    // // Object.keys(widths).forEach((cell: any) => {
+    // //   const column = worksheet.getColumn(cell);
+    // //   column.width = widths[cell];
+    // // });
+
+    // const headerRow = worksheet.addRow(headers);
+    // // headerRow.eachCell((cell:any) => {
+    // //   cell.border = {
+    // //     top: { style: "thick" },
+    // //     left: { style: "thick" },
+    // //     bottom: { style: "thick" },
+    // //     right: { style: "thick" },
+    // //   };
+    // //   cell.font = {
+    // //     bold: true,
+    // //   };
+    // // });
+
+
+
+    // const setBlackBackground = (
+    //   worksheet: any,
+    //   startCell: any,
+    //   endCell: any,
+    //   cellNumber: any
+    // ) => {
+    //   for (let i = startCell.charCodeAt(0); i <= endCell.charCodeAt(0); i++) {
+    //     const columnLetter = String.fromCharCode(i);
+    //     const cellAddress = `${columnLetter}${cellNumber}`;
+    //     const cell = worksheet.getCell(cellAddress);
+
+    //     // Set a black background for the cell
+    //     cell.fill = {
+    //       type: "pattern",
+    //       pattern: "solid",
+    //       fgColor: { argb: "000000" }, // Black background
+    //     };
+    //     cell.font = {
+    //       color: { argb: "FFFFFF" }, // White text
+    //     };
+    //   }
+    // }
+
+    // // var slno = 1
+    // // data.forEach((item: any) => {
+    // //   console.log(item.programCode ,  item.checkCode);
+    // //   if (SelectedProgrammes.includes(item.checkCode)) {
+
+    // //     const subRow = worksheet.addRow(Object.values(item));
+    // //     subRow.eachCell((cell:any, num:any) => {
+    // //       cell.border = {
+    // //         top: { style: "thin" },
+    // //         left: { style: "thin" },
+    // //         bottom: { style: "thin" },
+    // //         right: { style: "thin" },
+    // //       };
+    // //       if (num == 1 && cell.value){
+    // //         cell.value = slno++;
+    // //       }
+    // //       if (num == 2 && cell.value) {
+    // //         console.log(cell.row);
+    // //         setBlackBackground(worksheet, "A", "M", cell.row);
+    // //       }
+    // //       if (num == 14) {
+    // //         cell.value = "";
+    // //         cell.border = {};
+    // //       }
+    // //     });
+    // //   }
+    // // });
+
+    // for (let i = 0; i < dataToDownLoad?.length; i++) {
+    //   worksheet.addRow((dataToDownLoad as any)[i]);
+    // }
+    // dataToDownLoad.map((item:any)=>{
+    //   worksheet.addRow(Object.values(item));
+    // })
+    const workbook = new ExcelJS.Workbook();
+    const worksheet = workbook.addWorksheet('Student Data');
+  
+    // Add headers
+    worksheet.addRow(Object.keys(data[0]));
+  
+    // Add data
+    dataToDownLoad?.forEach(student => {
+      worksheet.addRow(Object.values(student));
+    });
+
+    // Generate the Excel file
+    const buffer = await workbook.xlsx.writeBuffer();
+
+    // Create a Blob containing the Excel file data
+    const blob = new Blob([buffer], { type: 'application/vnd.openxmlformats-officedocument.spreadsheetml.sheet' });
+  
+    // Create a URL for the Blob
+    const blobURL = URL.createObjectURL(blob);
+  
+    // Create a link to trigger the download
+    const a = document.createElement('a');
+    a.href = blobURL;
+    a.download = 'data.xlsx';
+    a.style.display = 'none';
+  
+    // Trigger the click event to start the download
+    document.body.appendChild(a);
+    a.click();
+  
+    // Clean up resources
+    URL.revokeObjectURL(blobURL);
+    document.body.removeChild(a);
+
+  }
 
 
   return (
@@ -358,10 +582,10 @@ const Candidate = (props: Props) => {
                     </button>
                   </ul>
                 </div>
-{/* export option */}
+                {/* export option */}
                 <button
                   className="hidden md:block ml-1 bg-secondary text-white rounded-full px-5 py-2 font-bold"
-                  onClick={downloadExcel}
+                  onClick={downloadClassTopper}
                 >
                   Export
                 </button>
@@ -375,69 +599,69 @@ const Candidate = (props: Props) => {
 
                 {/* filtering option */}
                 <div className="dropdown dropdown-end mr-1">
-                    <label
-                      tabIndex={0}
-                      className="hidden md:inline-flex bg-secondary ml-1  text-white rounded-full px-5 py-2 font-bold"
+                  <label
+                    tabIndex={0}
+                    className="hidden md:inline-flex bg-secondary ml-1  text-white rounded-full px-5 py-2 font-bold"
+                  >
+                    Filter
+                    <svg
+                      className="-mr-1 h-5 w-5 text-gray-400"
+                      viewBox="0 0 20 20"
+                      fill="currentColor"
+                      aria-hidden="true"
                     >
-                      Filter
-                      <svg
-                        className="-mr-1 h-5 w-5 text-gray-400"
-                        viewBox="0 0 20 20"
-                        fill="currentColor"
-                        aria-hidden="true"
-                      >
-                        <path
-                          fillRule="evenodd"
-                          d="M5.23 7.21a.75.75 0 011.06.02L10 11.168l3.71-3.938a.75.75 0 111.08 1.04l-4.25 4.5a.75.75 0 01-1.08 0l-4.25-4.5a.75.75 0 01.02-1.06z"
-                          clipRule="evenodd"
-                        />
-                      </svg>
-                    </label>
+                      <path
+                        fillRule="evenodd"
+                        d="M5.23 7.21a.75.75 0 011.06.02L10 11.168l3.71-3.938a.75.75 0 111.08 1.04l-4.25 4.5a.75.75 0 01-1.08 0l-4.25-4.5a.75.75 0 01.02-1.06z"
+                        clipRule="evenodd"
+                      />
+                    </svg>
+                  </label>
 
-                    <label
-                      tabIndex={0}
-                      className="md:hidden inline-flex bg-secondary ml-1  text-white rounded-full px-5 py-2 font-bold"
+                  <label
+                    tabIndex={0}
+                    className="md:hidden inline-flex bg-secondary ml-1  text-white rounded-full px-5 py-2 font-bold"
+                  >
+                    <FilterIcon className="w-7 h-7 fill-white cursor-pointer" />
+                    <svg
+                      className="-mr-1 h-5 w-5 text-gray-400"
+                      viewBox="0 0 20 20"
+                      fill="currentColor"
+                      aria-hidden="true"
                     >
-                     <FilterIcon className="w-7 h-7 fill-white cursor-pointer"/>
-                      <svg
-                        className="-mr-1 h-5 w-5 text-gray-400"
-                        viewBox="0 0 20 20"
-                        fill="currentColor"
-                        aria-hidden="true"
-                      >
-                        <path
-                          fillRule="evenodd"
-                          d="M5.23 7.21a.75.75 0 011.06.02L10 11.168l3.71-3.938a.75.75 0 111.08 1.04l-4.25 4.5a.75.75 0 01-1.08 0l-4.25-4.5a.75.75 0 01.02-1.06z"
-                          clipRule="evenodd"
-                        />
-                      </svg>
-                    </label>
-                    <ul
-                      tabIndex={0}
-                      className="dropdown-content z-[1] menu p-2 shadow bg-base-100 rounded-box w-40 font-bold"
-                    >
-                      {props.categories?.map((item: Category, index: number) => {
-                        return (
-                          <button
-                            className=" block px-2 py-1 text-md rounded-md hover:bg-secondary hover:text-white"
-                            onClick={() => {
-                              setCurrentPage(1);
-                              setData(
-                                allData.filter(
-                                  (itm: any) =>
-                                    itm?.category?.name?.toLocaleLowerCase() ===
-                                    item?.name?.toLocaleLowerCase()
-                                )
-                              );
-                            }}
-                          >
-                            {item.name}
-                          </button>
-                        );
-                      })}
-                    </ul>
-                  </div>
-                  {/* download option */}
+                      <path
+                        fillRule="evenodd"
+                        d="M5.23 7.21a.75.75 0 011.06.02L10 11.168l3.71-3.938a.75.75 0 111.08 1.04l-4.25 4.5a.75.75 0 01-1.08 0l-4.25-4.5a.75.75 0 01.02-1.06z"
+                        clipRule="evenodd"
+                      />
+                    </svg>
+                  </label>
+                  <ul
+                    tabIndex={0}
+                    className="dropdown-content z-[1] menu p-2 shadow bg-base-100 rounded-box w-40 font-bold"
+                  >
+                    {props.categories?.map((item: Category, index: number) => {
+                      return (
+                        <button
+                          className=" block px-2 py-1 text-md rounded-md hover:bg-secondary hover:text-white"
+                          onClick={() => {
+                            setCurrentPage(1);
+                            setData(
+                              allData.filter(
+                                (itm: any) =>
+                                  itm?.category?.name?.toLocaleLowerCase() ===
+                                  item?.name?.toLocaleLowerCase()
+                              )
+                            );
+                          }}
+                        >
+                          {item.name}
+                        </button>
+                      );
+                    })}
+                  </ul>
+                </div>
+                {/* download option */}
                 <button
                   className="hidden md:block ml-1 bg-secondary text-white rounded-full px-5 py-2 font-bold"
                   onClick={() => downloadProgrameList(data)}
