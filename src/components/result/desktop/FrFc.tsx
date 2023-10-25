@@ -26,6 +26,506 @@ export default function FirstRowFirstCard(props: Props) {
   }
     , [])
 
+  const getClassBasedToppers = () => {
+    console.log(props.programs);
+    // props.programs.map((program:any)=>{
+    // program.candidateProgramme.map((candiate:any)={
+
+    // })
+    // })
+
+    var programmes = [
+      {
+        "id": 221,
+        "name": "BRICK BALANCE",
+        "model": "Sports",
+        "mode": "NON_STAGE",
+        "type": "SINGLE",
+        "programCode": "RDST01",
+        "resultEntered": true,
+        "resultPublished": true,
+        "candidateCount": 3,
+        "category": {
+          "name": "ALIYA"
+        },
+        "skill": {
+          "name": "Sports"
+        },
+        "anyIssue": false,
+        "candidateProgramme": [
+          {
+            "id": 7602,
+            "point": 0,
+            "position": null,
+            "grade": null,
+            "candidate": {
+              "class": "F2",
+              "imageId": "1oVID0mtYshPOUY4WGpiMwIcyyThGzPP7",
+              "name": "Shaik Mustafi Rahman",
+              "chestNO": "S415",
+              "team": {
+                "name": "Gazette",
+                "id": 2
+              }
+            }
+          },
+          {
+            "id": 7601,
+            "point": 0,
+            "position": null,
+            "grade": null,
+            "candidate": {
+              "class": "F3",
+              "imageId": "19fCLCX5GUuLJLZJCoi0LJhvdkOaUXW-Z",
+              "name": "Afroz Ansari  ",
+              "chestNO": "S402",
+              "team": {
+                "name": "Gazette",
+                "id": 2
+              }
+            }
+          },
+          {
+            "id": 7600,
+            "point": 0,
+            "position": null,
+            "grade": null,
+            "candidate": {
+              "class": "HQ1",
+              "imageId": "10dXs7xe2Yn2LHazjV0OF--UrxuejSxbd",
+              "name": "Muhammed Irshad Ak",
+              "chestNO": "S360",
+              "team": {
+                "name": "Gazette",
+                "id": 2
+              }
+            }
+          },
+
+          {
+            "id": 6991,
+            "point": 3,
+            "position": {
+              "name": "First",
+              "value": 1,
+              "pointGroup": 10,
+              "pointSingle": 3,
+              "pointHouse": 15
+            },
+            "grade": null,
+            "candidate": {
+              "class": "HQ3",
+              "imageId": null,
+              "name": "Muhammed Suhail   Em",
+              "chestNO": "S721",
+              "team": {
+                "name": "Tribune",
+                "id": 4
+              }
+            }
+          }
+        ]
+      },
+      {
+        "id": 440,
+        "name": "GROUP SONG COMPOSITION & SINGING",
+        "model": "Arts",
+        "mode": "STAGE",
+        "type": "GROUP",
+        "programCode": "ATWU15",
+        "resultEntered": true,
+        "resultPublished": true,
+        "candidateCount": 3,
+        "category": {
+          "name": "THANAWIYYA"
+        },
+        "skill": {
+          "name": "Recitation"
+        },
+        "anyIssue": false,
+        "candidateProgramme": [
+          {
+            "id": 12764,
+            "point": 8,
+            "position": {
+              "name": "Third",
+              "value": 3,
+              "pointGroup": 5,
+              "pointSingle": 1,
+              "pointHouse": 7
+            },
+            "grade": {
+              "name": "B",
+              "pointGroup": 3,
+              "pointSingle": 3,
+              "pointHouse": 3
+            },
+            "candidate": {
+              "class": "U7",
+              "imageId": null,
+              "name": "FAIZAN ASHRAF   NOORI",
+              "chestNO": "C412",
+              "team": {
+                "name": "Gazette",
+                "id": 2
+              }
+            }
+          },
+          {
+            "id": 12763,
+            "point": 10,
+            "position": {
+              "name": "Second",
+              "value": 2,
+              "pointGroup": 7,
+              "pointSingle": 2,
+              "pointHouse": 10
+            },
+            "grade": {
+              "name": "B",
+              "pointGroup": 3,
+              "pointSingle": 3,
+              "pointHouse": 3
+            },
+            "candidate": {
+              "class": "U6",
+              "imageId": null,
+              "name": "MOHAMMED ZAID  ",
+              "chestNO": "C816",
+              "team": {
+                "name": "Tribune",
+                "id": 4
+              }
+            }
+          },
+          {
+            "id": 12762,
+            "point": 13,
+            "position": {
+              "name": "First",
+              "value": 1,
+              "pointGroup": 10,
+              "pointSingle": 3,
+              "pointHouse": 15
+            },
+            "grade": {
+              "name": "B",
+              "pointGroup": 3,
+              "pointSingle": 3,
+              "pointHouse": 3
+            },
+            "candidate": {
+              "class": "U6",
+              "imageId": null,
+              "name": "GULAM MUSTAFA  ",
+              "chestNO": "C218",
+              "team": {
+                "name": "Chronicle",
+                "id": 1
+              }
+            }
+          },
+          {
+            "id": 12456,
+            "point": 0,
+            "position": null,
+            "grade": null,
+            "candidate": {
+              "class": "U7",
+              "imageId": null,
+              "name": "MOMIN MOHD UMAR ATEEQUE AHMAD   ",
+              "chestNO": "C612",
+              "team": {
+                "name": "Herald",
+                "id": 3
+              }
+            }
+          }
+        ]
+      }, {
+        "id": 352,
+        "name": "FACE TO FACE ARB",
+        "model": "Arts",
+        "mode": "STAGE",
+        "type": "GROUP",
+        "programCode": "ATW18",
+        "resultEntered": true,
+        "resultPublished": true,
+        "candidateCount": 2,
+        "category": {
+          "name": "THANAWIYYA"
+        },
+        "skill": {
+          "name": "Presentation"
+        },
+        "anyIssue": false,
+        "candidateProgramme": [
+          {
+            "id": 12507,
+            "point": 8,
+            "position": {
+              "name": "Third",
+              "value": 3,
+              "pointGroup": 5,
+              "pointSingle": 1,
+              "pointHouse": 7
+            },
+            "grade": {
+              "name": "B",
+              "pointGroup": 3,
+              "pointSingle": 3,
+              "pointHouse": 3
+            },
+            "candidate": {
+              "class": "6A",
+              "imageId": "1bXBM6steUQB3iQw5i_34aov0er-Wl2ue",
+              "name": "Nishdan",
+              "chestNO": "C113",
+              "team": {
+                "name": "Chronicle",
+                "id": 1
+              }
+            }
+          },
+          {
+            "id": 12503,
+            "point": 15,
+            "position": {
+              "name": "First",
+              "value": 1,
+              "pointGroup": 10,
+              "pointSingle": 3,
+              "pointHouse": 15
+            },
+            "grade": {
+              "name": "A",
+              "pointGroup": 5,
+              "pointSingle": 5,
+              "pointHouse": 5
+            },
+            "candidate": {
+              "class": "U7",
+              "imageId": null,
+              "name": "MD SAIDUZZAMA  ",
+              "chestNO": "C615",
+              "team": {
+                "name": "Herald",
+                "id": 3
+              }
+            }
+          },
+
+        ]
+      },
+      {
+        "id": 356,
+        "name": "SPEECH AND SONG ARB",
+        "model": "Arts",
+        "mode": "STAGE",
+        "type": "GROUP",
+        "programCode": "ATW22",
+        "resultEntered": true,
+        "resultPublished": true,
+        "candidateCount": 3,
+        "category": {
+          "name": "THANAWIYYA"
+        },
+        "skill": {
+          "name": "Presentation"
+        },
+        "anyIssue": false,
+        "candidateProgramme": [
+          {
+            "id": 12507,
+            "point": 82,
+            "position": {
+              "name": "Third",
+              "value": 3,
+              "pointGroup": 5,
+              "pointSingle": 1,
+              "pointHouse": 7
+            },
+            "grade": {
+              "name": "B",
+              "pointGroup": 3,
+              "pointSingle": 3,
+              "pointHouse": 3
+            },
+            "candidate": {
+              "class": "6A",
+              "imageId": "1bXBM6steUQB3iQw5i_34aov0er-Wl2ue",
+              "name": "Nishdan",
+              "chestNO": "C113",
+              "team": {
+                "name": "Chronicle",
+                "id": 1
+              }
+            }
+          },
+          {
+            "id": 12503,
+            "point": 5,
+            "position": {
+              "name": "First",
+              "value": 1,
+              "pointGroup": 10,
+              "pointSingle": 3,
+              "pointHouse": 15
+            },
+            "grade": {
+              "name": "A",
+              "pointGroup": 5,
+              "pointSingle": 5,
+              "pointHouse": 5
+            },
+            "candidate": {
+              "class": "U7",
+              "imageId": null,
+              "name": "MD SAIDUZZAMA  ",
+              "chestNO": "C615",
+              "team": {
+                "name": "Herald",
+                "id": 3
+              }
+            }
+          },
+
+        ]
+      }
+    ]
+
+    //   var toppers:any = {
+    //     "Sports": {
+    //         "ALIYA": [
+    //             {
+    //                 "name": "Shaik Mustafi Rahman",
+    //                 "chestNo": "S415",
+    //                 "point": 0
+    //             },
+    //             {
+    //                 "name": "Afroz Ansari  ",
+    //                 "chestNo": "S402",
+    //                 "point": 0
+    //             },
+    //             {
+    //                 "name": "Muhammed Irshad Ak",
+    //                 "chestNo": "S360",
+    //                 "point": 0
+    //             },
+    //             {
+    //                 "name": "Muhammed Suhail   Em",
+    //                 "chestNo": "S721",
+    //                 "point": 3
+    //             }
+    //         ],
+    //         "Recitation": {
+    //             "THANAWIYYA": [
+    //                 {
+    //                     "name": "FAIZAN ASHRAF   NOORI",
+    //                     "chestNo": "C412",
+    //                     "point": 8
+    //                 },
+    //                 {
+    //                     "name": "MOHAMMED ZAID  ",
+    //                     "chestNo": "C816",
+    //                     "point": 10
+    //                 },
+    //                 {
+    //                     "name": "GULAM MUSTAFA  ",
+    //                     "chestNo": "C218",
+    //                     "point": 13
+    //                 },
+    //                 {
+    //                     "name": "MOMIN MOHD UMAR ATEEQUE AHMAD   ",
+    //                     "chestNo": "C612",
+    //                     "point": 0
+    //                 }
+    //             ]
+    //         },
+    //         "Presentation": {
+    //             "THANAWIYYA": [
+    //                 {
+    //                     "name": "Nishdan",
+    //                     "chestNo": "C113",
+    //                     "point": 90
+    //                 },
+    //                 {
+    //                     "name": "MD SAIDUZZAMA  ",
+    //                     "chestNo": "C615",
+    //                     "point": 20
+    //                 },
+
+    //             ]
+    //         }
+    //     }
+    // }
+
+
+    let toppers: any = {}
+    // Loop through the programmes array
+    const sortedPrograms = props.programs.filter((program) => {
+      return program.type == Types.Single
+    });
+
+    sortedPrograms.forEach((program: any) => {
+      const skillName = program.skill.name;
+      const categoryName = program.category.name;
+
+      if (program.candidateProgramme) {
+        // Loop through the candidateProgramme array
+        program.candidateProgramme.forEach((candidateProgram: any) => {
+          const { name, chestNO } = candidateProgram.candidate;
+
+          const point = candidateProgram.point;
+
+          // Check if the skill exists in toppers, if not, create it
+          if (!toppers[skillName]) {
+            toppers[skillName] = {};
+          }
+
+          // Check if the category exists in the skill, if not, create it
+          if (!toppers[skillName][categoryName]) {
+            toppers[skillName][categoryName] = [];
+          }
+          console.log((toppers as any)[skillName][categoryName]);
+
+
+          // if (toppers[skill] && toppers[skill][category]) {
+          //   const candidate = toppers[skill][category].find((c) => c.chestNo === chestNo);
+          //   if (candidate) {
+          //     candidate.point += additionalPoints;
+          //   }
+          // }
+
+          // Push the candidate data to the appropriate category and skill
+          toppers[skillName][categoryName].push({
+            name,
+            chestNo: chestNO,
+            point: point,
+          });
+
+
+        });
+      }
+    });
+
+    function sortCandidatesByPoints(candidates: any) {
+      return candidates.sort((a: any, b: any) => b.point - a.point);
+    }
+
+    // Loop through the toppers object and sort candidates within each category
+    for (const skill in toppers) {
+      for (const category in toppers[skill]) {
+        toppers[skill][category] = sortCandidatesByPoints(toppers[skill][category]);
+      }
+    }
+
+    console.log(toppers);
+
+
+  }
+  // getClassBasedToppers()
+
 
 
   return (
