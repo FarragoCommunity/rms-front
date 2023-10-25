@@ -19,20 +19,20 @@ export default function Download() {
                   {/* <div className="h-4/6 w-1/3 cursor-pointer 2xl:w-1/4 bg-accent rounded-2xl flex flex-col items-center justify-around leading-tight pt-5 transition-all duration-500  hover:scale-105"> */}
                   <Link className="h-4/6 w-1/3 cursor-pointer 2xl:w-1/4 bg-accent rounded-2xl flex flex-col items-center justify-around leading-tight pt-5 transition-all duration-500  hover:scale-105" href="https://docs.google.com/spreadsheets/d/1yzjfSJvtiSIPr1ozSLCLMhIgPPhY648bQ_LgMoGI9j4/edit?usp=sharing" passHref={true}>
                     <ExcelClassicIcon className="w-10 h-10 fill-secondary"/>
-                    <h1 className="text-sm  2xl:text-base font-bold text-center">CLASS WISERESULT</h1>
+                    <h1 className="text-sm  2xl:text-base font-bold text-center">CLASS WISE RESULT</h1>
                     <h1 className="text-xs text-center">(SMS)</h1>
                   </Link>
                   {/* </div> */}
                   {/* small card2 */}
                   <Link className="h-4/6 w-1/3 cursor-pointer 2xl:w-1/4 bg-accent rounded-2xl flex flex-col items-center justify-around leading-tight pt-5 transition-all duration-500  hover:scale-105 " href="https://docs.google.com/spreadsheets/d/1mNESBjbU3jeLlB2fXz7YlXY6CaGCh2zruDWmyiDSnns/edit?usp=sharing" passHref={true}>
                   <ExcelDarkIcon className="w-10 h-10 fill-secondary"/>
-                    <h1 className="text-sm  2xl:text-base font-bold text-center">DEPT WISERESULT</h1>
+                    <h1 className="text-sm  2xl:text-base font-bold text-center">DEPT WISE RESULT</h1>
                     <h1 className="text-xs text-center">(SMS)</h1>
                   </Link>
                   {/* small card3 */}
                   <Link className="h-4/6 w-1/3 cursor-pointer 2xl:w-1/4 bg-accent rounded-2xl flex flex-col items-center justify-around leading-tight pt-5 transition-all duration-500  hover:scale-105 " href="https://docs.google.com/spreadsheets/d/1yzjfSJvtiSIPr1ozSLCLMhIgPPhY648bQ_LgMoGI9j4/edit?usp=sharing" passHref={true}>
                     <ExcelClassicIcon className="w-10 h-10 fill-secondary"/>
-                    <h1 className="text-sm  2xl:text-base font-bold text-center">CLASS WISERESULT</h1>
+                    <h1 className="text-sm  2xl:text-base font-bold text-center">CLASS WISE RESULT</h1>
                     <h1 className="text-xs text-center">(CHS)</h1>
                   </Link>
                 </div>
