@@ -1,8 +1,10 @@
-import { CandidateProgramme, Type } from "@/gql/graphql";
+import { Candidate, CandidateProgramme, Type } from "@/gql/graphql";
 import { useState } from "react";
+import Certificate from "./Certificate";
 
 interface Props {
   publishedResults: CandidateProgramme[];
+  candidate: Candidate;
 }
 
 export default function ResultListPhone(props: Props) {
@@ -125,6 +127,10 @@ export default function ResultListPhone(props: Props) {
                           : `Nil`}
                       </p>
                       <p className="text-tn">{programme?.point}pts</p>
+                      <Certificate
+                        candidate={props.candidate}
+                        programme={programme}
+                      />
                     </div>
                   </div>
                 ))
@@ -152,6 +158,10 @@ export default function ResultListPhone(props: Props) {
                           : `Nil`}
                       </p>
                       <p className="text-tn">{programme?.point}pts</p>
+                      <Certificate
+                        candidate={props.candidate}
+                        programme={programme}
+                      />
                     </div>
                   </div>
                 ))
@@ -179,6 +189,10 @@ export default function ResultListPhone(props: Props) {
                           : `Nil`}
                       </p>
                       <p className="text-tn">{programme?.point}pts</p>
+                      <Certificate
+                        candidate={props.candidate}
+                        programme={programme}
+                      />
                     </div>
                   </div>
                 ))

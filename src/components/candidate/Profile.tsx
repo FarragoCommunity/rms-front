@@ -8,9 +8,10 @@ import ResultListPhone from "./ResultListPhone";
 
 import { useRouter } from "next/navigation";
 import NProgress from "nprogress";
+import Certificate from "./Certificate";
 interface Props {
   candidate: Candidate;
-candidateSportsPoint: number;
+  candidateSportsPoint: number;
   candidateArtsPoint: number;
 }
 
@@ -20,7 +21,6 @@ export default function ProgramAndResultDesktop(props: Props) {
   >([]);
   const [routerButtonClicked, setRouterButtonClicked] = useState(false);
   NProgress.configure({ showSpinner: false });
-  
 
   const router = useRouter();
 
@@ -42,8 +42,6 @@ export default function ProgramAndResultDesktop(props: Props) {
   const [allOrIndividualOrGroup, setAllOrIndividualOrGroup] = useState("all");
   const [allOrIndividualOrGroupResult, setAllOrIndividualOrGroupResult] =
     useState("all");
-
-
 
   const allPrograms = props?.candidate?.candidateProgrammes;
   const individualPrograms = props?.candidate?.candidateProgrammes?.filter(
@@ -307,81 +305,104 @@ export default function ProgramAndResultDesktop(props: Props) {
               {/* 1 */}
               {publishedResults.length > 0 ? (
                 allOrIndividualOrGroupResult === "all" ? (
-                  allPublishedResults?.filter(
-                    (programme) =>
-                      programme.position?.name || programme.grade?.name
-                  )?.map((programme) => (
-                    <div className="h-12 rounded-xl w-full bg-accent flex flex-row justify-between text-sm items-center p-5 ">
-                      <div className="flex gap-8 text-sm">
-                        <p className="">{programme?.programme?.programCode}</p>
-                        <p className="">{programme?.programme?.name}</p>
+                  allPublishedResults
+                    ?.filter(
+                      (programme) =>
+                        programme.position?.name || programme.grade?.name
+                    )
+                    ?.map((programme) => (
+                      <div className="h-12 rounded-xl w-full bg-accent flex flex-row justify-between text-sm items-center p-5 ">
+                        <div className="flex gap-8 text-sm">
+                          <p className="">
+                            {programme?.programme?.programCode}
+                          </p>
+                          <p className="">{programme?.programme?.name}</p>
+                        </div>
+                        <div className="text-sm flex gap-2 flex-row items-end -pt-2 ml-24">
+                          <p>
+                            {programme?.position?.name
+                              ? programme?.position?.name
+                              : `Nil`}
+                          </p>
+                          <p>
+                            {programme?.grade?.name
+                              ? programme?.grade?.name
+                              : `Nil`}
+                          </p>
+                          <p>{programme?.point}pts</p>
+                          <Certificate
+                            candidate={props.candidate}
+                            programme={programme}
+                          />
+                        </div>
                       </div>
-                      <div className="text-sm flex gap-2 flex-row items-end -pt-2 ml-24">
-                        <p>
-                          {programme?.position?.name
-                            ? programme?.position?.name
-                            : `Nil`}
-                        </p>
-                        <p>
-                          {programme?.grade?.name
-                            ? programme?.grade?.name
-                            : `Nil`}
-                        </p>
-                        <p>{programme?.point}pts</p>
-                        
-                      </div>
-                    </div>
-                  ))
+                    ))
                 ) : allOrIndividualOrGroupResult === "individual" ? (
-                  individualPublishedResults?.filter(
-                    (programme) =>
-                      programme.position?.name || programme.grade?.name
-                  )?.map((programme) => (
-                    <div className="h-12 rounded-xl w-full bg-accent flex flex-row justify-between text-sm items-center p-5">
-                      <div className="flex gap-8 text-sm">
-                        <p className="">{programme?.programme?.programCode}</p>
-                        <p className="">{programme?.programme?.name}</p>
+                  individualPublishedResults
+                    ?.filter(
+                      (programme) =>
+                        programme.position?.name || programme.grade?.name
+                    )
+                    ?.map((programme) => (
+                      <div className="h-12 rounded-xl w-full bg-accent flex flex-row justify-between text-sm items-center p-5">
+                        <div className="flex gap-8 text-sm">
+                          <p className="">
+                            {programme?.programme?.programCode}
+                          </p>
+                          <p className="">{programme?.programme?.name}</p>
+                        </div>
+                        <div className="text-sm flex gap-2 flex-row items-end -pt-2 ml-24">
+                          <p>
+                            {programme?.position?.name
+                              ? programme?.position?.name
+                              : `Nil`}
+                          </p>
+                          <p>
+                            {programme?.grade?.name
+                              ? programme?.grade?.name
+                              : `Nil`}
+                          </p>
+                          <p>{programme?.point}pts</p>
+                          <Certificate
+                            candidate={props.candidate}
+                            programme={programme}
+                          />
+                        </div>
                       </div>
-                      <div className="text-sm flex gap-2 flex-row items-end -pt-2 ml-24">
-                        <p>
-                          {programme?.position?.name
-                            ? programme?.position?.name
-                            : `Nil`}
-                        </p>
-                        <p>
-                          {programme?.grade?.name
-                            ? programme?.grade?.name
-                            : `Nil`}
-                        </p>
-                        <p>{programme?.point}pts</p>
-                      </div>
-                    </div>
-                  ))
+                    ))
                 ) : allOrIndividualOrGroupResult === "group" ? (
-                  groupPublishedResults?.filter(
-                    (programme) =>
-                      programme.position?.name || programme.grade?.name
-                  )?.map((programme) => (
-                    <div className="h-12 rounded-xl w-full bg-accent flex flex-row justify-between text-sm items-center p-5">
-                      <div className="flex gap-8 text-sm">
-                        <p className="">{programme?.programme?.programCode}</p>
-                        <p className="">{programme?.programme?.name}</p>
+                  groupPublishedResults
+                    ?.filter(
+                      (programme) =>
+                        programme.position?.name || programme.grade?.name
+                    )
+                    ?.map((programme) => (
+                      <div className="h-12 rounded-xl w-full bg-accent flex flex-row justify-between text-sm items-center p-5">
+                        <div className="flex gap-8 text-sm">
+                          <p className="">
+                            {programme?.programme?.programCode}
+                          </p>
+                          <p className="">{programme?.programme?.name}</p>
+                        </div>
+                        <div className="text-sm flex gap-2 flex-row items-end -pt-2 ml-24">
+                          <p>
+                            {programme?.position?.name
+                              ? programme?.position?.name
+                              : `Nil`}
+                          </p>
+                          <p>
+                            {programme?.grade?.name
+                              ? programme?.grade?.name
+                              : `Nil`}
+                          </p>
+                          <p>{programme?.point}pts</p>
+                          <Certificate
+                            candidate={props.candidate}
+                            programme={programme}
+                          />
+                        </div>
                       </div>
-                      <div className="text-sm flex gap-2 flex-row items-end -pt-2 ml-24">
-                        <p>
-                          {programme?.position?.name
-                            ? programme?.position?.name
-                            : `Nil`}
-                        </p>
-                        <p>
-                          {programme?.grade?.name
-                            ? programme?.grade?.name
-                            : `Nil`}
-                        </p>
-                        <p>{programme?.point}pts</p>
-                      </div>
-                    </div>
-                  ))
+                    ))
                 ) : null
               ) : (
                 <p>No Results Published</p>
@@ -448,7 +469,10 @@ export default function ProgramAndResultDesktop(props: Props) {
           {programsOrResults === "programs" ? (
             <ProgramListIpad candidate={props.candidate} />
           ) : (
-            <ResultListIpad publishedResults={publishedResults} />
+            <ResultListIpad
+              candidate={props.candidate}
+              publishedResults={publishedResults}
+            />
           )}
         </div>
       </div>
@@ -569,7 +593,10 @@ export default function ProgramAndResultDesktop(props: Props) {
             {programsOrResults === "programs" ? (
               <ProgramListPhone candidate={props.candidate} />
             ) : (
-              <ResultListPhone publishedResults={publishedResults} />
+              <ResultListPhone
+                candidate={props.candidate}
+                publishedResults={publishedResults}
+              />
             )}
           </div>
         </div>

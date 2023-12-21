@@ -1,8 +1,10 @@
-import { CandidateProgramme, Type } from "@/gql/graphql";
+import { Candidate, CandidateProgramme, Type } from "@/gql/graphql";
 import { useState } from "react";
+import Certificate from "./Certificate";
 
 interface Props {
   publishedResults: CandidateProgramme[];
+  candidate: Candidate;
 }
 
 export default function ResultListIpad(props: Props) {
@@ -95,89 +97,110 @@ export default function ResultListIpad(props: Props) {
         {/* resultslist Ipad */}
         {props.publishedResults?.length > 0 ? (
           allOrIndividualOrGroup === "all" ? (
-            allPublishedResults?.filter(
-              (programme) =>
-                programme.position?.name || programme.grade?.name
-            )?.map((programme) => (
-              <div className="h-14 w-11/12 bg-accent rounded-2xl flex items-center justify-between">
-                {/* code */}
-                <div className="px-3">
-                  <p className="">{programme?.programme?.programCode}</p>
+            allPublishedResults
+              ?.filter(
+                (programme) => programme.position?.name || programme.grade?.name
+              )
+              ?.map((programme) => (
+                <div className="h-14 w-11/12 bg-accent rounded-2xl flex items-center justify-between">
+                  {/* code */}
+                  <div className="px-3">
+                    <p className="">{programme?.programme?.programCode}</p>
+                  </div>
+                  {/* name */}
+                  <div className="px-3">
+                    <p className="">
+                      {programme?.programme?.name?.toUpperCase()}
+                    </p>
+                  </div>
+                  {/* result */}
+                  <div className="px-3 text-lt flex items-end gap-5">
+                    <p>
+                      {programme?.position?.name
+                        ? programme?.position?.name
+                        : `Nil`}
+                    </p>
+                    <p>
+                      {programme?.grade?.name ? programme?.grade?.name : `Nil`}
+                    </p>
+                    <p className="">{programme?.point}pts</p>
+                    <Certificate
+                      candidate={props.candidate}
+                      programme={programme}
+                    />
+                  </div>
                 </div>
-                {/* name */}
-                <div className="px-3">
-                  <p className="">{programme?.programme?.name?.toUpperCase()}</p>
-                </div>
-                {/* result */}
-                <div className="px-3 text-lt flex items-end gap-5">
-                  <p>
-                    {programme?.position?.name
-                      ? programme?.position?.name
-                      : `Nil`}
-                  </p>
-                  <p>
-                    {programme?.grade?.name ? programme?.grade?.name : `Nil`}
-                  </p>
-                  <p className="">{programme?.point}pts</p>
-                </div>
-              </div>
-            ))
+              ))
           ) : allOrIndividualOrGroup === "individual" ? (
-            individualPublishedResults?.filter(
-              (programme) =>
-                programme.position?.name || programme.grade?.name
-            )?.map((programme) => (
-              <div className="h-14 w-11/12 bg-accent rounded-2xl flex items-center justify-between">
-                {/* code */}
-                <div className="px-3">
-                  <p className="">{programme?.programme?.programCode}</p>
+            individualPublishedResults
+              ?.filter(
+                (programme) => programme.position?.name || programme.grade?.name
+              )
+              ?.map((programme) => (
+                <div className="h-14 w-11/12 bg-accent rounded-2xl flex items-center justify-between">
+                  {/* code */}
+                  <div className="px-3">
+                    <p className="">{programme?.programme?.programCode}</p>
+                  </div>
+                  {/* name */}
+                  <div className="px-3">
+                    <p className="">
+                      {programme?.programme?.name?.toUpperCase()}
+                    </p>
+                  </div>
+                  {/* result */}
+                  <div className="px-3 text-lt flex items-end gap-5">
+                    <p>
+                      {programme?.position?.name
+                        ? programme?.position?.name
+                        : `Nil`}
+                    </p>
+                    <p>
+                      {programme?.grade?.name ? programme?.grade?.name : `Nil`}
+                    </p>
+                    <p className="">{programme?.point}pts</p>
+                    <Certificate
+                      candidate={props.candidate}
+                      programme={programme}
+                    />
+                  </div>
                 </div>
-                {/* name */}
-                <div className="px-3">
-                  <p className="">{programme?.programme?.name?.toUpperCase()}</p>
-                </div>
-                {/* result */}
-                <div className="px-3 text-lt flex items-end gap-5">
-                  <p>
-                    {programme?.position?.name
-                      ? programme?.position?.name
-                      : `Nil`}
-                  </p>
-                  <p>
-                    {programme?.grade?.name ? programme?.grade?.name : `Nil`}
-                  </p>
-                  <p className="">{programme?.point}pts</p>
-                </div>
-              </div>
-            ))
+              ))
           ) : allOrIndividualOrGroup === "group" ? (
-            groupPublishedResults?.filter(
-              (programme) =>
-                programme.position?.name || programme.grade?.name
-            )?.map((programme) => (
-              <div className="h-14 w-11/12 bg-accent rounded-2xl flex items-center justify-between">
-                {/* code */}
-                <div className="px-3">
-                  <p className="">{programme?.programme?.programCode}</p>
+            groupPublishedResults
+              ?.filter(
+                (programme) => programme.position?.name || programme.grade?.name
+              )
+              ?.map((programme) => (
+                <div className="h-14 w-11/12 bg-accent rounded-2xl flex items-center justify-between">
+                  {/* code */}
+                  <div className="px-3">
+                    <p className="">{programme?.programme?.programCode}</p>
+                  </div>
+                  {/* name */}
+                  <div className="px-3">
+                    <p className="">
+                      {programme?.programme?.name?.toUpperCase()}
+                    </p>
+                  </div>
+                  {/* result */}
+                  <div className="px-3 text-lt flex items-end gap-5">
+                    <p>
+                      {programme?.position?.name
+                        ? programme?.position?.name
+                        : `Nil`}
+                    </p>
+                    <p>
+                      {programme?.grade?.name ? programme?.grade?.name : `Nil`}
+                    </p>
+                    <p className="">{programme?.point}pts</p>
+                    <Certificate
+                      candidate={props.candidate}
+                      programme={programme}
+                    />
+                  </div>
                 </div>
-                {/* name */}
-                <div className="px-3">
-                  <p className="">{programme?.programme?.name?.toUpperCase()}</p>
-                </div>
-                {/* result */}
-                <div className="px-3 text-lt flex items-end gap-5">
-                  <p>
-                    {programme?.position?.name
-                      ? programme?.position?.name
-                      : `Nil`}
-                  </p>
-                  <p>
-                    {programme?.grade?.name ? programme?.grade?.name : `Nil`}
-                  </p>
-                  <p className="">{programme?.point}pts</p>
-                </div>
-              </div>
-            ))
+              ))
           ) : null
         ) : (
           <p>No Results To View</p>
