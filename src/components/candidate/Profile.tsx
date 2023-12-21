@@ -303,12 +303,15 @@ export default function ProgramAndResultDesktop(props: Props) {
             </div>
             <hr className="border" />
             {/* list */}
-            <div className="mx-5 flex flex-col items-center overflow-y-auto gap-5 h-41/50 pt-5">
+            <div className="mx-5 flex flex-col items-center overflow-y-auto gap-5 h-[80%] py-5">
               {/* 1 */}
               {publishedResults.length > 0 ? (
                 allOrIndividualOrGroupResult === "all" ? (
-                  allPublishedResults?.map((programme) => (
-                    <div className="h-12 rounded-xl w-full bg-accent flex flex-row justify-between text-sm items-center px-5">
+                  allPublishedResults?.filter(
+                    (programme) =>
+                      programme.position?.name || programme.grade?.name
+                  )?.map((programme) => (
+                    <div className="h-12 rounded-xl w-full bg-accent flex flex-row justify-between text-sm items-center p-5 ">
                       <div className="flex gap-8 text-sm">
                         <p className="">{programme?.programme?.programCode}</p>
                         <p className="">{programme?.programme?.name}</p>
@@ -325,12 +328,16 @@ export default function ProgramAndResultDesktop(props: Props) {
                             : `Nil`}
                         </p>
                         <p>{programme?.point}pts</p>
+                        
                       </div>
                     </div>
                   ))
                 ) : allOrIndividualOrGroupResult === "individual" ? (
-                  individualPublishedResults?.map((programme) => (
-                    <div className="h-12 rounded-xl w-full bg-accent flex flex-row justify-between text-sm items-center px-5">
+                  individualPublishedResults?.filter(
+                    (programme) =>
+                      programme.position?.name || programme.grade?.name
+                  )?.map((programme) => (
+                    <div className="h-12 rounded-xl w-full bg-accent flex flex-row justify-between text-sm items-center p-5">
                       <div className="flex gap-8 text-sm">
                         <p className="">{programme?.programme?.programCode}</p>
                         <p className="">{programme?.programme?.name}</p>
@@ -351,8 +358,11 @@ export default function ProgramAndResultDesktop(props: Props) {
                     </div>
                   ))
                 ) : allOrIndividualOrGroupResult === "group" ? (
-                  groupPublishedResults?.map((programme) => (
-                    <div className="h-12 rounded-xl w-full bg-accent flex flex-row justify-between text-sm items-center px-5">
+                  groupPublishedResults?.filter(
+                    (programme) =>
+                      programme.position?.name || programme.grade?.name
+                  )?.map((programme) => (
+                    <div className="h-12 rounded-xl w-full bg-accent flex flex-row justify-between text-sm items-center p-5">
                       <div className="flex gap-8 text-sm">
                         <p className="">{programme?.programme?.programCode}</p>
                         <p className="">{programme?.programme?.name}</p>

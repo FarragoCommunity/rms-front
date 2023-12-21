@@ -95,7 +95,10 @@ export default function ResultListIpad(props: Props) {
         {/* resultslist Ipad */}
         {props.publishedResults?.length > 0 ? (
           allOrIndividualOrGroup === "all" ? (
-            allPublishedResults?.map((programme) => (
+            allPublishedResults?.filter(
+              (programme) =>
+                programme.position?.name || programme.grade?.name
+            )?.map((programme) => (
               <div className="h-14 w-11/12 bg-accent rounded-2xl flex items-center justify-between">
                 {/* code */}
                 <div className="px-3">
@@ -120,7 +123,10 @@ export default function ResultListIpad(props: Props) {
               </div>
             ))
           ) : allOrIndividualOrGroup === "individual" ? (
-            individualPublishedResults?.map((programme) => (
+            individualPublishedResults?.filter(
+              (programme) =>
+                programme.position?.name || programme.grade?.name
+            )?.map((programme) => (
               <div className="h-14 w-11/12 bg-accent rounded-2xl flex items-center justify-between">
                 {/* code */}
                 <div className="px-3">
@@ -145,7 +151,10 @@ export default function ResultListIpad(props: Props) {
               </div>
             ))
           ) : allOrIndividualOrGroup === "group" ? (
-            groupPublishedResults?.map((programme) => (
+            groupPublishedResults?.filter(
+              (programme) =>
+                programme.position?.name || programme.grade?.name
+            )?.map((programme) => (
               <div className="h-14 w-11/12 bg-accent rounded-2xl flex items-center justify-between">
                 {/* code */}
                 <div className="px-3">

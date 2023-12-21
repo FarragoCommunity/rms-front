@@ -102,59 +102,86 @@ export default function ResultListPhone(props: Props) {
           {/* resultslist Ipad */}
           {props.publishedResults?.length > 0 ? (
             allOrIndividualOrGroup === "all" ? (
-              allPublishedResults?.map((programme) => (
-                <div className="h-10 w-[90%] bg-accent rounded-2xl flex justify-between items-center px-3">
-                  <p className="text-lt">{programme?.programme?.programCode}</p>
-                  <p className="text-lt">{programme?.programme?.name}</p>
-                  <div className="flex items-end gap-2">
-                    <p className="text-tn">
-                      {programme?.position?.name
-                        ? programme?.position?.name
-                        : `Nil`}
+              allPublishedResults
+                ?.filter(
+                  (programme) =>
+                    programme.position?.name || programme.grade?.name
+                )
+                ?.map((programme) => (
+                  <div className="h-10 w-[90%] bg-accent rounded-2xl flex justify-between items-center px-3">
+                    <p className="text-lt">
+                      {programme?.programme?.programCode}
                     </p>
-                    <p className="text-tn">
-                      {programme?.grade?.name ? programme?.grade?.name : `Nil`}
-                    </p>
-                    <p className="text-tn">{programme?.point}pts</p>
+                    <p className="text-lt">{programme?.programme?.name}</p>
+                    <div className="flex items-end gap-2">
+                      <p className="text-tn">
+                        {programme?.position?.name
+                          ? programme?.position?.name
+                          : `Nil`}
+                      </p>
+                      <p className="text-tn">
+                        {programme?.grade?.name
+                          ? programme?.grade?.name
+                          : `Nil`}
+                      </p>
+                      <p className="text-tn">{programme?.point}pts</p>
+                    </div>
                   </div>
-                </div>
-              ))
+                ))
             ) : allOrIndividualOrGroup === "individual" ? (
-              individualPublishedResults?.map((programme) => (
-                <div className="h-10 w-[90%] bg-accent rounded-2xl flex justify-between items-center px-3">
-                  <p className="text-lt">{programme?.programme?.programCode}</p>
-                  <p className="text-lt">{programme?.programme?.name}</p>
-                  <div className="flex items-end gap-2">
-                    <p className="text-tn">
-                      {programme?.position?.name
-                        ? programme?.position?.name
-                        : `Nil`}
+              individualPublishedResults
+                ?.filter(
+                  (programme) =>
+                    programme.position?.name || programme.grade?.name
+                )
+                ?.map((programme) => (
+                  <div className="h-10 w-[90%] bg-accent rounded-2xl flex justify-between items-center px-3">
+                    <p className="text-lt">
+                      {programme?.programme?.programCode}
                     </p>
-                    <p className="text-tn">
-                      {programme?.grade?.name ? programme?.grade?.name : `Nil`}
-                    </p>
-                    <p className="text-tn">{programme?.point}pts</p>
+                    <p className="text-lt">{programme?.programme?.name}</p>
+                    <div className="flex items-end gap-2">
+                      <p className="text-tn">
+                        {programme?.position?.name
+                          ? programme?.position?.name
+                          : `Nil`}
+                      </p>
+                      <p className="text-tn">
+                        {programme?.grade?.name
+                          ? programme?.grade?.name
+                          : `Nil`}
+                      </p>
+                      <p className="text-tn">{programme?.point}pts</p>
+                    </div>
                   </div>
-                </div>
-              ))
+                ))
             ) : allOrIndividualOrGroup === "group" ? (
-              groupPublishedResults?.map((programme) => (
-                <div className="h-10 w-[90%] bg-accent rounded-2xl flex justify-between items-center px-3">
-                  <p className="text-lt">{programme?.programme?.programCode}</p>
-                  <p className="text-lt">{programme?.programme?.name}</p>
-                  <div className="flex items-end gap-2">
-                    <p className="text-tn">
-                      {programme?.position?.name
-                        ? programme?.position?.name
-                        : `Nil`}
+              groupPublishedResults
+                ?.filter(
+                  (programme) =>
+                    programme.position?.name || programme.grade?.name
+                )
+                ?.map((programme) => (
+                  <div className="h-10 w-[90%] bg-accent rounded-2xl flex justify-between items-center px-3">
+                    <p className="text-lt">
+                      {programme?.programme?.programCode}
                     </p>
-                    <p className="text-tn">
-                      {programme?.grade?.name ? programme?.grade?.name : `Nil`}
-                    </p>
-                    <p className="text-tn">{programme?.point}pts</p>
+                    <p className="text-lt">{programme?.programme?.name}</p>
+                    <div className="flex items-end gap-2">
+                      <p className="text-tn">
+                        {programme?.position?.name
+                          ? programme?.position?.name
+                          : `Nil`}
+                      </p>
+                      <p className="text-tn">
+                        {programme?.grade?.name
+                          ? programme?.grade?.name
+                          : `Nil`}
+                      </p>
+                      <p className="text-tn">{programme?.point}pts</p>
+                    </div>
                   </div>
-                </div>
-              ))
+                ))
             ) : null
           ) : (
             <p>No Results To View</p>
