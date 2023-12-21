@@ -40,36 +40,8 @@ export default function Certificate(props: Props) {
       // Set the font to Montserrat
       doc.setFont('Anek Malayalam');
 
-      // Add text and other content on top of the background image
       doc.setFontSize(15);
       doc.setTextColor(200); // Set text color to black
-
-
-
-      // // Calculate the starting X-coordinate for center alignment
-      // var startX = (doc.internal.pageSize.getWidth() - textWidth) / 2;
-
-      // // Add the entire sentence
-      // doc.text(
-      //   'This is to certify that Miss FATHIMA AJVA KM',
-      //   startX,
-      //   yPosition
-      // );
-
-      // // Get the width of the specific words without extra spaces
-      // var specificWords = 'FATHIMA AJVA KM';
-      // var specificWordsWidth = doc.getStringUnitWidth(specificWords) * 15;
-
-      // // Calculate the position for the line under specific words
-      // var lineStartX =
-      //   (doc.internal.pageSize.getWidth() - specificWordsWidth) / 2;
-      // var lineEndX = specificWordsWidth;
-
-      // // Draw a line under specific words
-      // doc.line(lineStartX + 4.5, yPosition + 2, lineEndX, yPosition + 2);
-
-      // This is to certify that Mr.Muhammed Jasil has been awarded the FIRST prize with A grade in EXCEL EXPERT SENIOR in Realia'23 DHIU UG Arts Fest organized by Al Huda Students' Association (ASAs) on October 11-15, 2023, at Darul Huda Islamic University.
-      
 
       const lines = {
         1: `This is to certify that Mr .${candidateName} has been awarded`,
@@ -83,10 +55,6 @@ export default function Certificate(props: Props) {
      doc.text(lines[2],145, 282.5);
       doc.text(lines[3],145, 297.5);
       doc.text(lines[4],145, 312.5);
-      // doc.text(lines[2], pdfWidth / 2, 127, { align: 'center' });
-      // doc.text(lines[3], pdfWidth / 2, 136, { align: 'center' });
-      // doc.text(lines[4], pdfWidth / 2, 145, { align: 'center' });
-      // doc.text(lines[5], pdfWidth / 2, 154, { align: 'center' });
     });
     doc.deletePage(1);
 
